@@ -52,58 +52,110 @@ public class Encryption{
 
 
 	public void Encrypt(String plainText, String key) throws Exception { 
-		System.out.println("Encryption");
-		// create new key
-		SecretKey secretKey = null;
-		try {
-			secretKey = KeyGenerator.getInstance("DES").generateKey();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+		
+		//Split input into left and right
+		String L1 = "";
+		String R1 = "";
+		int counter = 0;
+		for (int i = 0; i < plainText.length(); i++) {
+			//if input file has whitespace, ignore it
+			if(plainText.charAt(i) != ' ' && counter <= 31) {
+				L1 += plainText.charAt(i);
+				counter++;
+				if(counter == 32) {
+					i++;
+				}
+			}
+			if (plainText.charAt(i) != ' ' && L1.length() > 31 && counter < 64) {
+				R1 += plainText.charAt(i);
+				counter++;
+			}
+			
 		}
-		// get base64 encoded version of the key
-		String encodedKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+		//Printing for debugging purposes
+		System.out.println("L1 : " + L1);
+		System.out.println("R1 : " + R1);
+		
+		
+		
+		//Expansion/permutation 
+		
+		//XOR with key
+		XOR(L1, key); //just testing with L1 this needs to change
+		
+		
+		//S-Box
+		
+		//Permutation
+		
+		//XOR
 
-		//May remove these later - checking it all works
-		//System.out.println("Encoded key " + encodedKey);
-		//System.out.println("Secret key " + secretKey.getEncoded());
-
-		//Create DES cipher
-		Cipher cipher = Cipher.getInstance("DES");
-		//Initialize cipher using des
-		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-		//changing plaintext to ciphertext using the cipher created above
-		byte[] ciphertext = cipher.doFinal(plainText.getBytes());
-		
-		System.out.println("Ciphertext C: " + ciphertext);
-		
-		//sealed object is a different implementation -- may delete and keep it simple
-		SealedObject sealedObject = new SealedObject(plainText, cipher);
-		//System.out.println("Sealed object " + sealedObject);
-		
-		writeToFile(ciphertext);
 	}
-	
+
+	private String XOR(String bitsToXOR, String key) {
+		//Key is 56 bits 
+		if(key.length() != 56) {
+			System.err.println("Key length should be 56 bits in input file");
+		}
+		
+		//We will store the result of the XOR operating in result
+		String result = "";
+
+		for (int i = 0; i < key.length(); i++) {
+			//Padding zero bits to the left so that we XOR with 2 48bits
+			while(bitsToXOR.length() < key.length()) {
+				bitsToXOR = "0"  + bitsToXOR;
+			}			
+
+			//XOR function
+			//If the key and plaintext are the same value, the XOR result will be zero
+			if(key.charAt(i) == bitsToXOR.charAt(i)) {
+				result +=  "0";
+			}
+			//When the key and plaintext values are different, the result will be one
+			else  
+			{
+				result +="1";
+			}
+		}
+
+		
+		
+		System.out.println("--------- XOR Operation ---------");
+		System.out.println(key +  "     key");
+		System.out.println(bitsToXOR + "     input");
+		System.out.println(result + "     XOR Result");
+		System.out.println("--------- XOR Finished ---------");
+
+		return result;
+	}
+
+
+
+
+
+
 	private static void writeToFile(byte[] ciphertext) throws Exception {
 		StringBuffer outputBuffer;
-			outputBuffer = new StringBuffer();
-			
-			outputBuffer.append("Plaintext P: " + plainText);
-		    outputBuffer.append(System.getProperty("line.separator"));
+		outputBuffer = new StringBuffer();
 
-			outputBuffer.append("Key K: " + key);
-		    outputBuffer.append(System.getProperty("line.separator"));
-		    
-			outputBuffer.append("Ciphertext C: " + ciphertext);
-		    outputBuffer.append(System.getProperty("line.separator"));
-		    
-		    printToFile(outputBuffer);
+		outputBuffer.append("Plaintext P: " + plainText);
+		outputBuffer.append(System.getProperty("line.separator"));
+
+		outputBuffer.append("Key K: " + key);
+		outputBuffer.append(System.getProperty("line.separator"));
+
+		outputBuffer.append("Ciphertext C: " + ciphertext);
+		outputBuffer.append(System.getProperty("line.separator"));
+
+		printToFile(outputBuffer);
 	}	
-	
+
 	public static void printToFile(StringBuffer outputBuffer) throws IOException {
 		PrintWriter printWriter = new PrintWriter(new FileWriter("output.txt"));
 		printWriter.append(outputBuffer);
 		printWriter.close();	
 	}
 
-
+//note we should do a check for the lengths of input. ie plaintext should be 64 and key 56
 }

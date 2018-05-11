@@ -33,8 +33,8 @@ public class Application {
 			System.err.println("No input file to read, please provide it");	
 
 
-			plaintext = getPlainText("C:/Users/user/workspace/DES/src/input.txt");
-			key = getKey("C:/Users/user/workspace/DES/src/input.txt");
+			plaintext = getPlainText("C:/Users/user/workspace/DESS/src/input.txt");
+			key = getKey("C:/Users/user/workspace/DESS/src/input.txt");
 
 			System.out.println("Plaintext: " + plaintext);
 			System.out.println("Key: " + key);
