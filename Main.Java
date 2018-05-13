@@ -1,5 +1,4 @@
 import java.io.*;
-import Input.java;
 
 
 /**Name :           Nathan Davidson
@@ -8,69 +7,82 @@ import Input.java;
  */
 
 public class Main
+{
+        public static void main(String[] args)
         {
-public static void main(String[] args)
-        {
-        /**args 0 = decryption or encryption denoted d or e (ingoreing case)
-         args 1 = input file name
-         args 2 = output file name
-         */
+                /**args 0 = decryption or encryption denoted d or e (ingoreing case)
+                 args 1 = input file name
+                 args 2 = output file name
+                 */
 
 
-        String input = "";
-        String choice = "";
-        String inputFileName = "inputFile";
-        String outPutFileName = "outPutFile";
-        try
-        {
-        if(args.length==0)
-        {
-        //Error
-        }
-        else
-        {
-            input = args[0];
-        if(input.equalsIgnoreCase("e")) // encryption
-        {
-        choice=args[0];
-        }
-        else if(input.equalsIgnoreCase("d")) // decryption
-        {
-        choice=args[0];
-        }
-        else
-        {
-        //Error
-        }
+                String input = "";
+                String choice = "";
+                String inputFileName = "inputFile";
+                String outPutFileName = "outPutFile";
+                try
+                {
+                        if(args.length==0)
+                        {
+                                //Error
+                                System.out.println("no arguments provided please " +
+                                        "provide either d or e for decryption or encryption followed by \n" +
+                                        "input file name \n" + "output file name");
+                        }
+                        else
+                        {
+                                /**
+                                 * testing code :
+                                 for (int i = 0; i < args.length ; i++) {
+                                 System.out.println(args[i]);
+                                 }
+                                 */
+                                input = args[0];
+                                if(input.equalsIgnoreCase("e")) // encryption
+                                {
+                                        choice=args[0];
+                                        System.out.println("im equal to e "+ args[0]);
+                                }
+                                else if(input.equalsIgnoreCase("d")) // decryption
+                                {
+                                        choice=args[0];
+                                        System.out.println("im equal to d "+ args[0]);
+                                }
+                                else
+                                {
+                                        //Error
+                                }
 
-        if(args.length>1) // they have provided a file name
-        {
-        inputFileName=args[1];
-        }
-        else
-        {
-        //Error cant assume inputfile name
-        }
+                                if(args.length>1) // they have provided a file name
+                                {
+                                        inputFileName=args[1];
+                                        System.out.println("im equal to inputFileName "+ args[1]);
+                                }
+                                else
+                                {
+                                        //Error cant assume inputfile name
+                                }
 
-        if(args.length>2) // they have provided a file name
-        {
-            outPutFileName =args[2];
-        }
-        else
-        {
-        System.out.println("default output file name is :"+outPutFileName);
-        }
+                                if(args.length>2) // they have provided a file name
+                                {
+                                        outPutFileName =args[2];
+                                        System.out.println("im equal to outPutFileName "+ args[2]);
+                                }
+                                else
+                                {
+                                        System.out.println("default output file name is :"+outPutFileName);
+                                }
 
-        InputStream FileInputStream = new FileInputStream(inputFileName);
-        Input scanner = new Input(FileInputStream);
+                                InputStream FileInputStream = new FileInputStream(inputFileName);
+                                Input scanner = new Input(FileInputStream);
+
+                        }
+                }
+                catch (Exception e)
+                {
+                        System.out.println("Error with file handling, please ensure a valid data file was provided in the same location as the compiled java files");
+                        e.printStackTrace();
+                }
 
         }
-        }
-        catch (Exception e)
-        {
-        System.out.println("Error with file handling, please ensure a valid data file was provided in the same location as the compiled java files");
-        e.printStackTrace();
-        }
-
-        }
-        }
+}
