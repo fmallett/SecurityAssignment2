@@ -49,9 +49,16 @@ public class Encryption{
 	private static String plainText;
 	private static String key;
 	private SBox SBox = new SBox();
+	private InitialPermutation initialPermutation = new InitialPermutation();
 
 
 	public void Encrypt(String plainText, String key) throws Exception { 
+		
+		//Initial permutation
+		System.out.println("Before  permuation: " + plainText);
+		plainText = initialPermutation.performInitialPermutation(plainText);
+
+		System.out.println("Initial permuation: " + plainText);
 		
 		//Split input into left and right
 		String Li = "";
