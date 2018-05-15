@@ -50,41 +50,19 @@ public class Encryption{
 	private static String key;
 	private SBox SBox = new SBox();
 	private InitialPermutation initialPermutation = new InitialPermutation();
-
+	private FinalPermutation finalPermutation = new FinalPermutation();
+	private String Li = "";
+	private String Ri = "";
 
 	public void Encrypt(String plainText, String key) throws Exception { 
 		
 		//Initial permutation
-		System.out.println("Before  permuation: " + plainText);
 		plainText = initialPermutation.performInitialPermutation(plainText);
-
-		System.out.println("Initial permuation: " + plainText);
-		
-		//Split input into left and right
-		String Li = "";
-		String Ri = "";
-		int counter = 0;
-		for (int i = 0; i < plainText.length(); i++) {
-			//if input file has whitespace, ignore it
-			if(plainText.charAt(i) != ' ' && counter <= 31) {
-				Li += plainText.charAt(i);
-				counter++;
-				if(counter == 32) {
-					i++;
-				}
-			}
-			if (plainText.charAt(i) != ' ' && Li.length() > 31 && counter < 64) {
-				Ri += plainText.charAt(i);
-				counter++;
-			}
-			
-		}
-		//Printing for debugging purposes
-		System.out.println("Li : " + Li);
-		System.out.println("Ri : " + Ri);
-		
-		
-		
+	
+		//--------------------Start of round function------------------------
+		//Spilt input (64 bits) into two 32 bit strings
+		splitInput();
+	
 		//Expansion/permutation 
 		
 		
@@ -97,9 +75,45 @@ public class Encryption{
 		//Permutation
 		
 		//XOR
-
+		
+		
+		//---------------------End of round function -------------------------------
+		
+		//32 bit swap
+		
+		
+		//Final permutation
+		plainText = finalPermutation.performFinalPermutation(plainText);
+	
+		writeToFile();
 	}
 
+	private void splitInput() {
+		//Split input into left 32 bits and right 32 bits
+				int counter = 0;
+				for (int i = 0; i < plainText.length(); i++) {
+					//if input file has whitespace, ignore it
+					if(plainText.charAt(i) != ' ' && counter <= 31) {
+						Li += plainText.charAt(i);
+						counter++;
+						if(counter == 32) {
+							i++;
+						}
+					}
+					if (plainText.charAt(i) != ' ' && Li.length() > 31 && counter < 64) {
+						Ri += plainText.charAt(i);
+						counter++;
+					}					
+				}		
+	}
+	
+	private void expansionPermutation() {
+		
+		//takes 32 bit input to produce 48 bit output
+		
+	}
+	
+	
 	private String XOR(String bitsToXOR, String key) {
 		String temp = "";
 		//Key is 56 bits 
@@ -127,12 +141,6 @@ public class Encryption{
 				result +="1";
 			}
 		}
-
-		System.out.println("--------- XOR Operation ---------");
-		System.out.println(key +  "     key");
-		System.out.println(bitsToXOR + "     input");
-		System.out.println(result + "     XOR Result");
-		System.out.println("--------- XOR Finished ---------");
 
 		//We want a result with 48 bits
 		//As we XORd with 56 bit key, the result will be 56 bits
@@ -166,12 +174,11 @@ public class Encryption{
 				result.append(SBox.getSboxValue(7, R1beforeSBox.substring(36, 42)));
 				result.append(SBox.getSboxValue(8, R1beforeSBox.substring(42, 48)));
 
-				System.out.println("SBox result " + result);
 				return result.toString();
 	}
 
 
-	private static void writeToFile(byte[] ciphertext) throws Exception {
+	private static void writeToFile() throws IOException {
 		StringBuffer outputBuffer;
 		outputBuffer = new StringBuffer();
 
@@ -181,9 +188,12 @@ public class Encryption{
 		outputBuffer.append("Key K: " + key);
 		outputBuffer.append(System.getProperty("line.separator"));
 
-		outputBuffer.append("Ciphertext C: " + ciphertext);
+	//	outputBuffer.append("Ciphertext C: " + ciphertext);
 		outputBuffer.append(System.getProperty("line.separator"));
 
+		outputBuffer.append("Avalanche: " );
+		outputBuffer.append(System.getProperty("line.separator"));
+		
 		printToFile(outputBuffer);
 	}	
 
@@ -194,4 +204,5 @@ public class Encryption{
 	}
 
 //note we should do a check for the lengths of input. ie plaintext should be 64 and key 56
+	//eg whitespace, no whitespace
 }
