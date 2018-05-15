@@ -17,11 +17,6 @@ public class FinalPermutation {
 			34, 2, 42, 10, 50, 18, 58, 26,
 			33, 1, 41,  9, 49, 17, 57, 25
 	};
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 	
 	public String performFinalPermutation(String plainTextInput) {
 		String output = "";
@@ -30,9 +25,7 @@ public class FinalPermutation {
 		//to form the final permuted data
 		for (int i = 0; i < inverseIP.length; i++) {
 			output += plainTextInput.charAt(inverseIP[i]-1);
-		
 		}
 		return output;
 	}
-
 }
