@@ -1,9 +1,10 @@
 
 /**
- *@Name Fiona Mallett
- *@Course Computer Science
- *@StudentNumber 3289339
-*/
+ *@Name : Fiona Mallett
+ *@Course : COMP3260
+ *@StudentNumber : 3289339
+ *@Date :
+ */
 
 public class FinalPermutation {
 

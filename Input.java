@@ -2,9 +2,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-/**Name :           Nathan Davidson
- * Student Number : C3187164
- * Date :           8/5/18
+/**
+ * @Name :           Nathan Davidson
+ * @Student Number : C3187164
+ * @Corse :          COMP3260
+ * @Date :           8/5/18
  */
 
 public class Input
@@ -63,7 +65,7 @@ public class Input
             // line feed character (enter, new line would imply the key )
             // assumption is the key is next as we hit the end of the line
             // space = 32
-            line++;
+                line++;
 
 
             if(charCount == 64 && line < 2)

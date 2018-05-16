@@ -1,9 +1,11 @@
 import java.io.*;
 
 
-/**Name :           Nathan Davidson
- * Student Number : C3187164
- * Date :           8/5/18
+/**
+ * @Name :           Nathan Davidson
+ * @Student Number : C3187164
+ * @Corse :          COMP3260
+ * @Date :           12/5/18
  */
 
 public class Main
@@ -82,14 +84,14 @@ public class Main
                                 painText = scanner.getpText();
                                 key = scanner.getsKey();
 
-                                //System.out.println(painText + "\n" + key);
+                            //System.out.println(painText + "\n" + key);
 
                         }
                         if(choice.equalsIgnoreCase("e") )
                         {
                                 // run encryption
-                                encrypt = new Encryption(painText,key);
-                                encrypt.Encrypt(painText, key);
+                            encrypt = new Encryption(painText,key);
+                            encrypt.Encrypt(painText, key);
 
                         }
                         else if (choice.equalsIgnoreCase("d"))
