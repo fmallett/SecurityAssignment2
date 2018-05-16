@@ -20,6 +20,10 @@ public class Main
                 String choice = "";
                 String inputFileName = "inputFile";
                 String outPutFileName = "outPutFile";
+                Encryption encrypt;
+                Input scanner;
+                String painText = "";
+                String key = "";
                 try
                 {
                         if(args.length==0)
@@ -74,8 +78,23 @@ public class Main
                                 }
 
                                 InputStream FileInputStream = new FileInputStream(inputFileName);
-                                Input scanner = new Input(FileInputStream);
+                                scanner = new Input(FileInputStream);
+                                painText = scanner.getpText();
+                                key = scanner.getsKey();
 
+                                //System.out.println(painText + "\n" + key);
+
+                        }
+                        if(choice.equalsIgnoreCase("e") )
+                        {
+                                // run encryption
+                                encrypt = new Encryption(painText,key);
+                                encrypt.Encrypt(painText, key);
+
+                        }
+                        else if (choice.equalsIgnoreCase("d"))
+                        {
+                                // run decryption
                         }
                 }
                 catch (Exception e)
