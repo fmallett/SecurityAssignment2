@@ -12,16 +12,17 @@ public class Main
 {
     public static void main(String[] args)
     {
-         /**args 0 = decryption or encryption denoted d or e (ingoreing case)
+         /**args 0 = decryption or encryption denoted d or e (ingoreing case) been over ruled changed to reading first line of file for a 0 or a 1
           args 1 = input file name
           args 2 = output file name
           */
 
 
          String input = "";
-         String choice = "";
-         String inputFileName = "inputFile";
-         String outPutFileName = "outPutFile";
+
+         char choice = ' ';
+         String inputFileName = "inputFile.txt";
+         String outPutFileName = "outPutFile.txt";
          Encryption encrypt;
          Input scanner;
          String plainText = "";
@@ -31,9 +32,7 @@ public class Main
                if(args.length==0)
                {
                     //Error
-                    System.out.println("no arguments provided please " +
-                                        "provide either d or e for decryption or encryption followed by \n" +
-                                        "input file name \n" + "output file name");
+                    System.out.println("No arguments provided, Please provide a" + "Input file name \n" + "and a Output file name");
                }
                else
                {
@@ -43,6 +42,8 @@ public class Main
                      System.out.println(args[i]);
                      }
                      */
+                    /**
+                     * old code:
                     input = args[0];
                     if(input.equalsIgnoreCase("e")) // encryption
                     {
@@ -58,50 +59,48 @@ public class Main
                     {
                         //Error
                     }
-
-                    if(args.length>1) // they have provided a file name
+                     */
+                    if(args.length>0) // they have provided a file name
                     {
-                        inputFileName=args[1];
-                        System.out.println("im equal to inputFileName "+ args[1]);
+                        inputFileName=args[0];
+                        //System.out.println("im equal to inputFileName "+ args[0]);
                     }
                     else
                     {
                         //Error cant assume inputfile name
                     }
 
-                    if(args.length>2) // they have provided a file name
+                    if(args.length>1) // they have provided a file name
                     {
-                        outPutFileName =args[2];
-                        System.out.println("im equal to outPutFileName "+ args[2]);
+                        outPutFileName =args[1];
+                        //System.out.println("im equal to outPutFileName "+ args[1]);
                     }
                     else
                     {
-                        System.out.println("default output file name is :"+outPutFileName);
+                        System.out.println("Default output file name is :"+outPutFileName);
                     }
 
                     InputStream FileInputStream = new FileInputStream(inputFileName);
                     scanner = new Input(FileInputStream);
                     plainText = scanner.getpText();
                     key = scanner.getsKey();
+                    choice = scanner.getChoice();
 
-                   // System.out.println(plainText + "\n" + key + " " + key.length()+ " " + plainText.length());
+                    System.out.println(plainText + "\n" + key + " " + plainText.length() + " " + key.length());
 
                }
-               if(choice.equalsIgnoreCase("e") )
+               if(choice == '0' )
                {
-                   // run encryption
-
+                   //Run Encryption
                    encrypt = new Encryption(plainText,key);
                    //encrypt.Encrypt(painText, key);
-                  // KeyGeneration theKey = new KeyGeneration(key);
-                  // theKey.begin();
 
+                   //KeyGeneration theKey = new KeyGeneration(key);
+                   //theKey.begin();
                }
-               else if (choice.equalsIgnoreCase("d"))
+               else if (choice == '1')
                {
-                  // run decryption
-
-
+                  //Run Decryption
                }
          }
          catch (Exception e)

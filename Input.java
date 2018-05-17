@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -29,9 +28,12 @@ public class Input
     private String sKey;
     private int line = 0;
     private int inputCharByte = 0;
+    private char choice = ' ';
     int count = 0;
     ArrayList plainText;
     ArrayList key;
+
+
 
     //15 spaces if broken into sets of length 4 resulting in 16 sets * 4
     // however if data is actually less then length 64 before new line would imply padding is needed, dont believe it will be pre padded
@@ -44,17 +46,70 @@ public class Input
         pText = "";
         sKey = "";
 
-        while(!eofFlag)
+        //whitespace filter for first line
+        inputCharByte = inputStream.read();
+        while (inputCharByte == 10 || inputCharByte == 13 || inputCharByte == 32 || inputCharByte == 9)
         {
-            //testing code:  System.out.println("im reading the characters from file " + inputCharByte +" value: " + value);
-            read();
+            inputCharByte = inputStream.read();
         }
+            choice = (char) inputCharByte;
 
+        
+        if(choice == '1' || choice == '0')
+        {
+            //filter out enter and line feed char after the encryption (0) or decryption (1) on the first line
+
+            if(safetyCheck())
+            {
+                while(!eofFlag)
+                {
+                    //testing code:  System.out.println("im reading the characters from file " + inputCharByte +" value: " + value);
+                    readFile();
+                    inputCharByte = inputStream.read();
+                }
+            }
+            else
+            {
+                System.exit(-1); // cannot continue force program shutdown to avoid random errors
+            }
+        }
+        else
+        {
+            System.out.println("Missing Literal in file provided on line 1 that denotes Encryption (1) or Decryption (0)");
+            System.exit(-1); // cannot continue force program shutdown to avoid random errors
+        }
     }
 
-    private void read() throws java.io.IOException
+    private boolean safetyCheck() throws java.io.IOException
     {
+        boolean check = true;
         inputCharByte = inputStream.read();
+        char value = (char) inputCharByte;
+
+        if(value == '1' || value == '0')
+        {
+            System.out.println("Fist line contains more then 1 literal character");
+            check = false;
+            return check;
+        }
+        else
+        {
+            while (inputCharByte == 10 || inputCharByte == 13 || inputCharByte == 32 || inputCharByte == 9)
+            {
+                inputCharByte = inputStream.read();
+                if(inputCharByte == -1)
+                {
+                    System.out.println("Reached end of file after reading first line ");
+                    check = false;
+                }
+            }
+        }
+        return  check;
+    }
+
+    private void readFile() throws java.io.IOException
+    {
+
 
         if(inputCharByte == 10 || inputCharByte == 13)
         {
@@ -96,7 +151,7 @@ public class Input
 
         }
 
-        else if (inputCharByte == 9 || inputCharByte == 32) // tab
+        else if (inputCharByte == 9 || inputCharByte == 32) // tab & space
         {
             // ingore current input its a space or a tab by forcing a read of the inputstream (gets next char)
             inputCharByte = inputStream.read();
@@ -137,4 +192,7 @@ public class Input
         return sKey;
     }
 
+    public char getChoice() {
+        return choice;
+    }
 }

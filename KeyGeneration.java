@@ -27,13 +27,40 @@ public class KeyGeneration {
         setup();
 
     }
+    private void keyPadCheck()
+    {
+
+        if(key.length() <64)
+        {
+            //Padding the key is needed or PC1 will error; Null Pointer Exception
+            aStringBuilder.append(key);
+            int value = 64 - key.length();
+            for (int i = 0; i < value ; i++)
+            {
+                aStringBuilder.append("0");
+
+            }
+            key = aStringBuilder.toString();
+            aStringBuilder.delete(0,aStringBuilder.length());
+            //System.out.println("Key padded length :" +key.length() +" Key :"+ key);
+        }
+        else
+        {
+            //Don't pad key
+        }
+
+    }
     //step 1, setup C0,D0 28 bits each half, c0 gets 0 -> 28; d0 gets 29 -> 56;
     //step 2, after setup begin computing the 16 rounds which involves
         //setup of c1-15 and d1-15
         //generate key 1-16 using c0d0->16 with PC-2 for each pair (16 times)
     private void setup()
     {
-        pc1Key = pc1.performPC1(key); //initialise the PC1 permutation on the input key and store it
+        //Safety check
+        keyPadCheck();
+
+        //Initialise the PC1 permutation on the input key and store it
+        pc1Key = pc1.performPC1(key);
 
         //being setup of C0 D0 (28 bits splitting PC1 key in 2 equal halves of 56)
         for (int i = 0; i < 28 ; i++)
