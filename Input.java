@@ -28,14 +28,14 @@ public class Input
     private String pText;
     private String sKey;
     private int line = 0;
-
     private int inputCharByte = 0;
-
     int count = 0;
     ArrayList plainText;
     ArrayList key;
+
     //15 spaces if broken into sets of length 4 resulting in 16 sets * 4
     // however if data is actually less then length 64 before new line would imply padding is needed, dont believe it will be pre padded
+
     Input(InputStream inputStream_) throws java.io.IOException
     {
         inputStream = inputStream_;
@@ -50,14 +50,10 @@ public class Input
             read();
         }
 
-
     }
-
-
 
     private void read() throws java.io.IOException
     {
-
         inputCharByte = inputStream.read();
 
         if(inputCharByte == 10 || inputCharByte == 13)
@@ -66,7 +62,6 @@ public class Input
             // assumption is the key is next as we hit the end of the line
             // space = 32
                 line++;
-
 
             if(charCount == 64 && line < 2)
             {
@@ -93,13 +88,11 @@ public class Input
                 keyCheck = true;
 
             }
-            else if (charCount == 64 && line < 3)
+            else if (count == 64 && line < 3)
             {
                 sKey = aStringBuilder.toString();
                 aStringBuilder.delete(0,aStringBuilder.length());
             }
-
-
 
         }
 
@@ -113,32 +106,26 @@ public class Input
         {
             eofFlag = true;
             charCount = 0;
-            //System.out.println(pText + "\n" + sKey);
+            if(sKey.length() ==0)
+            {
+                sKey = aStringBuilder.toString();
+            }
         }
-
-
 
         value = (char) inputCharByte;
         if(!keyCheck && line < 3  && charCount < 64)
         {
             plainText.add(value);
-
             aStringBuilder.append(value);
-
             charCount++;
         }
-        else if (line < 3 && count < 57 && inputCharByte != 13 && inputCharByte !=10 ) // charCount > 64
+        else if (line < 3 && count < 64 && inputCharByte != 13 && inputCharByte !=10 ) // charCount > 64
         {
             count++;
-
             key.add(value);
-
             aStringBuilder.append(value);
 
         }
-
-
-
 
     }
 
