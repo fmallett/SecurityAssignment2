@@ -18,7 +18,8 @@ public class FinalPermutation {
 			34, 2, 42, 10, 50, 18, 58, 26,
 			33, 1, 41,  9, 49, 17, 57, 25
 	};
-	
+
+		
 	public String performFinalPermutation(String plainTextInput) {
 		String output = "";
 		//each of the 64 values in the final permutation array will be used as an index.

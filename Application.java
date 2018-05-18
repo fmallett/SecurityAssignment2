@@ -27,7 +27,10 @@ public class Application {
 			System.out.println("Plaintext P: " + plaintext);
 			System.out.println("Key K: " + key);
 			encrypt = new Encryption (plaintext, key);
-			encrypt.Encrypt(plaintext, key);
+//			encrypt.Encrypt(plaintext, key, 0);
+//			encrypt.Encrypt(plaintext, key, 1);
+//			encrypt.Encrypt(plaintext, key, 2);
+//			encrypt.Encrypt(plaintext, key, 3);
 		
 		}
 		else {
@@ -40,7 +43,10 @@ public class Application {
 			System.out.println("Plaintext: " + plaintext);
 			System.out.println("Key: " + key);
 			encrypt = new Encryption (plaintext, key);
-			encrypt.Encrypt(plaintext, key);
+//			encrypt.Encrypt(plaintext, key, 0);
+//			encrypt.Encrypt(plaintext, key, 1);
+//			encrypt.Encrypt(plaintext, key, 2);
+//			encrypt.Encrypt(plaintext, key, 3);
 		}
 	}
 

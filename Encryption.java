@@ -29,39 +29,57 @@ public class Encryption{
 	private String right = "";
 	private String tempRight = "";
 	private ExpansionPermutation expansionPermutation = new ExpansionPermutation();
+	private InverseETable inverseETable = new InverseETable();
 	private Permutation permutation = new Permutation(); 
+	private	KeyGeneration keyGeneration ;
+	private static StringBuffer outputBuffer = new StringBuffer();
 	
-	KeyGeneration keyGeneration ;//= new KeyGeneration(key);
-	
-	public void Encrypt(String plainText, String key) throws Exception { 
+
+	public void Encrypt(String plainText, String key, int DESVersion, String outputFileName) throws Exception { 
 
 		keyGeneration = new KeyGeneration(key);
-		
+
 		//Initial permutation
 		cipherText = initialPermutation.performInitialPermutation(plainText);
 
 		//Split input (64 bits) into two 32 bit strings
 		splitInput();
-
+		
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
-			roundFunction(right, round);
+
+			if(DESVersion == 0){
+				roundFunctionDES0(right, round);
+			}
+			else if(DESVersion == 1){
+				roundFunctionDES1(right, round);
+			}
+			else if(DESVersion == 2){
+				roundFunctionDES2(right, round);
+			}
+			else if(DESVersion == 3){
+				roundFunctionDES3(right, round);
+			}
 			//XOR Left with Right, the result is the new Right
 			tempRight = XOR32Bits(left, right);
 			//32 bit swap
 			left = right;
 			right = tempRight;
 		}
-		cipherText = left+right;
 		
+		cipherText = left+right;
+		//reset left and right so we can start fresh for DES1, DES2 DES3 ..
+		left = "";
+		right = "";
+		
+
 		//Final permutation (Inverse IP)
 		cipherText = finalPermutation.performFinalPermutation(cipherText);
-
-		writeToFile();
+		
+		writeToFile(outputFileName);
 	}
 
-	private void roundFunction(String tempRi, int roundNumber) {
-
+	private void roundFunctionDES0(String tempRi, int roundNumber) {
 		//Expansion/permutation 
 		tempRi = expansionPermutation.expand(tempRi);
 
@@ -72,8 +90,51 @@ public class Encryption{
 		tempRi = useSBox(tempRi);
 
 		//Permutation function(P)
-		tempRi = permutation.permutationFunctionP(tempRi);
+		right = permutation.permutationFunctionP(tempRi);
 	}
+
+	private void roundFunctionDES1(String tempRi, int roundNumber) {
+		//PERMUTATION MISSING FROM DES1
+		//Expansion/permutation 
+		tempRi = expansionPermutation.expand(tempRi);
+		//XOR with key
+		tempRi = XOR(tempRi, keyGeneration.getFinalKeyList().get(roundNumber)); //subkey[i] ----- 16 rounds
+		//S-Box
+		right = useSBox(tempRi);
+	}
+
+	private void roundFunctionDES2(String tempRi, int roundNumber) {
+		//S-box is replaced with the inverse of
+		//the expansion permutation (E-table)
+
+		//Expansion/permutation 
+		tempRi = expansionPermutation.expand(tempRi);
+		//XOR with key
+		tempRi = XOR(tempRi, keyGeneration.getFinalKeyList().get(roundNumber)); 
+
+		//S-Box replaced here for DES2
+		tempRi = inverseETable.performInversePermutation(tempRi);
+
+		//Permutation function(P)
+		right = permutation.permutationFunctionP(tempRi);
+	}
+
+	private void roundFunctionDES3(String tempRi, int roundNumber) {
+		//The permutation P is missing 
+		//S-box is replaced with the inverse of
+		//the expansion permutation (E-table)
+
+		//Expansion/permutation 
+		tempRi = expansionPermutation.expand(tempRi);
+		//XOR with key
+		tempRi = XOR(tempRi, keyGeneration.getFinalKeyList().get(roundNumber)); 
+
+		//S-Box replaced here for DES3
+		tempRi = inverseETable.performInversePermutation(tempRi);
+		
+		//final permutation missing
+	}
+
 
 	private void splitInput() {
 		//Split input into left 32 bits and right 32 bits
@@ -98,10 +159,11 @@ public class Encryption{
 		//check the left and right bits are 32 bits long
 		if (left.length() != 32 && right.length() != 32){
 			//Carry on with the operation anyway but print an error message to inform the user
-			System.err.println("Left or right Strings are not 32 bits long");
+			System.err.println("Method XOR32Bits: Left or right Strings are not 32 bits long");
 		}
 
 		String result = "";
+		String temp ="";
 		for (int i = 0; i < left.length(); i++) {
 			//When the bits at the same position in the left and right Strings match, 
 			//the XOR result is 0
@@ -112,9 +174,6 @@ public class Encryption{
 			else {
 				result +="1";
 			}
-		}
-		if (result.length() != 32) {
-			System.err.println("Result of XOR left 32 bits with right 32 bits is not 32 bits long");
 		}
 		return result;
 	}
@@ -170,9 +229,9 @@ public class Encryption{
 	}
 
 
-	private static void writeToFile() throws IOException {
-		StringBuffer outputBuffer;
-		outputBuffer = new StringBuffer();
+	private static void writeToFile(String outputFileName) throws IOException {
+		//		StringBuffer outputBuffer;
+		//		outputBuffer = new StringBuffer();
 
 		outputBuffer.append("Plaintext P: " + plainText);
 		outputBuffer.append(System.getProperty("line.separator"));
@@ -186,13 +245,15 @@ public class Encryption{
 		outputBuffer.append("Avalanche: " );
 		outputBuffer.append(System.getProperty("line.separator"));
 
-		printToFile(outputBuffer);
+		printToFile(outputBuffer, outputFileName);
 	}	
 
-	public static void printToFile(StringBuffer outputBuffer) throws IOException {
-		PrintWriter printWriter = new PrintWriter(new FileWriter("output.txt"));
+	public static void printToFile(StringBuffer outputBuffer, String outputFileName) throws IOException {
+		PrintWriter printWriter = new PrintWriter(new FileWriter(outputFileName));
 		printWriter.append(outputBuffer);
 		printWriter.close();	
+		
+		System.out.println("Printed output to " + outputFileName);
 	}
 
 	//note we should do a check for the lengths of input. ie plaintext should be 64 and key 56
