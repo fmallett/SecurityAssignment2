@@ -25,6 +25,7 @@ public class KeyGeneration {
         C = new ArrayList<String>(16);
         concatenatedCDkey = new ArrayList<String>(16);
         setup();
+        begin();
 
     }
     private void keyPadCheck()

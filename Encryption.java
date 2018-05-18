@@ -1,33 +1,6 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Path;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
-import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SealedObject;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
 
 /**
  *@Name : Fiona Mallett
@@ -52,22 +25,34 @@ public class Encryption{
 	private SBox SBox = new SBox();
 	private InitialPermutation initialPermutation = new InitialPermutation();
 	private FinalPermutation finalPermutation = new FinalPermutation();
-	private String Li = "";
-	private String Ri = "";
+	private String Left = "";
+	private String Right = "";
+	private String tempRight = "";
 	private ExpansionPermutation expansionPermutation = new ExpansionPermutation();
 	private Permutation permutation = new Permutation(); 
-
+	
+	KeyGeneration keyGeneration ;//= new KeyGeneration(key);
+	
 	public void Encrypt(String plainText, String key) throws Exception { 
 
+		keyGeneration = new KeyGeneration(key);
+		
 		//Initial permutation
 		plainText = initialPermutation.performInitialPermutation(plainText);
 
+		//Split input (64 bits) into two 32 bit strings
+		splitInput();
+		System.out.println("Original left  " + Left) ;
+		System.out.println("Original right " + Right);
+
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
-			roundFunction();
-		//XOR Li with Ri, the result is the new Ri
-		Ri = XOR32Bits(Li, Ri);
-		//32 bit swap
+			roundFunction(Right, round);
+			//XOR Left with Right, the result is the new Right
+			tempRight = XOR32Bits(Left, Right);
+			//32 bit swap
+			Left = Right;
+			Right = tempRight;
 		}
 
 		//Final permutation
@@ -76,23 +61,19 @@ public class Encryption{
 		writeToFile();
 	}
 
-	private void roundFunction() {
-		//Split input (64 bits) into two 32 bit strings
-		splitInput();
+	private void roundFunction(String tempRi, int roundNumber) {
 
 		//Expansion/permutation 
-		Ri = expansionPermutation.expand(Ri);
+		tempRi = expansionPermutation.expand(tempRi);
 
 		//XOR with key
-		Ri = XOR(Ri, key); 
+		tempRi = XOR(tempRi, keyGeneration.getFinalKeyList().get(roundNumber)); //subkey[i] ----- 16 rounds
 
 		//S-Box
-		Ri = useSBox(Ri);
+		tempRi = useSBox(tempRi);
 
 		//Permutation function(P)
-		Ri = permutation.permutationFunctionP(Ri);
-
-
+		tempRi = permutation.permutationFunctionP(tempRi);
 	}
 
 	private void splitInput() {
@@ -101,14 +82,14 @@ public class Encryption{
 		for (int i = 0; i < plainText.length(); i++) {
 			//if input file has whitespace, ignore it
 			if(plainText.charAt(i) != ' ' && counter <= 31) {
-				Li += plainText.charAt(i);
+				Left += plainText.charAt(i);
 				counter++;
 				if(counter == 32) {
 					i++;
 				}
 			}
-			if (plainText.charAt(i) != ' ' && Li.length() > 31 && counter < 64) {
-				Ri += plainText.charAt(i);
+			if (plainText.charAt(i) != ' ' && Left.length() > 31 && counter < 64) {
+				Right += plainText.charAt(i);
 				counter++;
 			}					
 		}		
@@ -143,7 +124,7 @@ public class Encryption{
 	private String XOR(String bitsToXOR, String key) {
 		String temp = "";
 		//Key is 56 bits 
-		if(key.length() != 56) {
+		if(key.length() != 48) {
 			System.err.println("Key length should be 56 bits in input file");
 		}
 
@@ -167,21 +148,7 @@ public class Encryption{
 				result +="1";
 			}
 		}
-
-		//We want a result with 48 bits
-		//As we XORd with 56 bit key, the result will be 56 bits
-		//So we will keep XORing with the key until we have 8 leading zeros (48 bit result)
-		for (int i = 0; i < 8; i++) {
-			if(result.charAt(i) != '0'){
-				return XOR(result, key);
-			}
-		}
-
-		//removing leading 8 zeros
-		for (int j = 8; j < 56; j++) {
-			temp += result.charAt(j);
-		}
-		return temp;
+		return result;
 	}
 
 	private String useSBox(String R1beforeSBox) {
