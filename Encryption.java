@@ -16,17 +16,17 @@ public class Encryption{
 		super();
 		this.plainText = plainText;
 		this.key = key;
-
 	}
 
 	//Read file for input and key
 	private static String plainText;
 	private static String key;
+	private static String cipherText;
 	private SBox SBox = new SBox();
 	private InitialPermutation initialPermutation = new InitialPermutation();
 	private FinalPermutation finalPermutation = new FinalPermutation();
-	private String Left = "";
-	private String Right = "";
+	private String left = "";
+	private String right = "";
 	private String tempRight = "";
 	private ExpansionPermutation expansionPermutation = new ExpansionPermutation();
 	private Permutation permutation = new Permutation(); 
@@ -38,25 +38,24 @@ public class Encryption{
 		keyGeneration = new KeyGeneration(key);
 		
 		//Initial permutation
-		plainText = initialPermutation.performInitialPermutation(plainText);
+		cipherText = initialPermutation.performInitialPermutation(plainText);
 
 		//Split input (64 bits) into two 32 bit strings
 		splitInput();
-		System.out.println("Original left  " + Left) ;
-		System.out.println("Original right " + Right);
 
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
-			roundFunction(Right, round);
+			roundFunction(right, round);
 			//XOR Left with Right, the result is the new Right
-			tempRight = XOR32Bits(Left, Right);
+			tempRight = XOR32Bits(left, right);
 			//32 bit swap
-			Left = Right;
-			Right = tempRight;
+			left = right;
+			right = tempRight;
 		}
-
-		//Final permutation
-		plainText = finalPermutation.performFinalPermutation(plainText);
+		cipherText = left+right;
+		
+		//Final permutation (Inverse IP)
+		cipherText = finalPermutation.performFinalPermutation(cipherText);
 
 		writeToFile();
 	}
@@ -82,14 +81,14 @@ public class Encryption{
 		for (int i = 0; i < plainText.length(); i++) {
 			//if input file has whitespace, ignore it
 			if(plainText.charAt(i) != ' ' && counter <= 31) {
-				Left += plainText.charAt(i);
+				left += plainText.charAt(i);
 				counter++;
 				if(counter == 32) {
 					i++;
 				}
 			}
-			if (plainText.charAt(i) != ' ' && Left.length() > 31 && counter < 64) {
-				Right += plainText.charAt(i);
+			if (plainText.charAt(i) != ' ' && left.length() > 31 && counter < 64) {
+				right += plainText.charAt(i);
 				counter++;
 			}					
 		}		
@@ -181,7 +180,7 @@ public class Encryption{
 		outputBuffer.append("Key K: " + key);
 		outputBuffer.append(System.getProperty("line.separator"));
 
-		//	outputBuffer.append("Ciphertext C: " + ciphertext);
+		outputBuffer.append("Ciphertext C: " + cipherText);
 		outputBuffer.append(System.getProperty("line.separator"));
 
 		outputBuffer.append("Avalanche: " );
