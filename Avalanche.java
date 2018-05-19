@@ -28,7 +28,7 @@ public class Avalanche {
 
 	public static ArrayList<String> permutePByOneBit(String plaintextP) {
 		StringBuilder tempPermutedP = new StringBuilder();
-		ArrayList<String> listOfPermutations = new ArrayList<>();
+		ArrayList<String> listOfPermutations = new ArrayList<String>();
 
 		//This will loop through the length of the plaintext (64 bits assumed)
 		//It permutes one bit each round and store the result (Pi) each time in an arraylist
