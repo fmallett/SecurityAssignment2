@@ -33,7 +33,7 @@ public class Encryption{
 	private Permutation permutation = new Permutation(); 
 	private	KeyGeneration keyGeneration ;
 	private static StringBuffer outputBuffer = new StringBuffer();
-	
+	private String prevRight = "";
 
 	public void Encrypt(String plainText, String key, int DESVersion, String outputFileName) throws Exception { 
 
@@ -44,30 +44,36 @@ public class Encryption{
 
 		//Split input (64 bits) into two 32 bit strings
 		splitInput();
-		
+		right = cipherText.substring(32,64);
+		left = cipherText.substring(0,32);
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
 
 			if(DESVersion == 0){
+				prevRight = right;
 				roundFunctionDES0(right, round);
 			}
 			else if(DESVersion == 1){
+				prevRight = right;
 				roundFunctionDES1(right, round);
 			}
 			else if(DESVersion == 2){
+				prevRight = right;
 				roundFunctionDES2(right, round);
 			}
 			else if(DESVersion == 3){
+				prevRight = right;
 				roundFunctionDES3(right, round);
 			}
 			//XOR Left with Right, the result is the new Right
 			tempRight = XOR32Bits(left, right);
 			//32 bit swap
-			left = right;
+			//left = right;
+			left = prevRight;
 			right = tempRight;
 		}
 		
-		cipherText = left+right;
+		cipherText = right+left;
 		//reset left and right so we can start fresh for DES1, DES2 DES3 ..
 		left = "";
 		right = "";
@@ -80,7 +86,8 @@ public class Encryption{
 	}
 
 	private void roundFunctionDES0(String tempRi, int roundNumber) {
-		//Expansion/permutation 
+		//Expansion/permutation
+
 		tempRi = expansionPermutation.expand(tempRi);
 
 		//XOR with key
@@ -90,6 +97,7 @@ public class Encryption{
 		tempRi = useSBox(tempRi);
 
 		//Permutation function(P)
+
 		right = permutation.permutationFunctionP(tempRi);
 	}
 
