@@ -46,6 +46,7 @@ public class Encryption{
 		splitInput();
 		right = cipherText.substring(32,64);
 		left = cipherText.substring(0,32);
+		
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
 
@@ -147,17 +148,17 @@ public class Encryption{
 	private void splitInput() {
 		//Split input into left 32 bits and right 32 bits
 		int counter = 0;
-		for (int i = 0; i < plainText.length(); i++) {
+		for (int i = 0; i < cipherText.length(); i++) {
 			//if input file has whitespace, ignore it
 			if(plainText.charAt(i) != ' ' && counter <= 31) {
-				left += plainText.charAt(i);
+				left += cipherText.charAt(i);
 				counter++;
 				if(counter == 32) {
 					i++;
 				}
 			}
-			if (plainText.charAt(i) != ' ' && left.length() > 31 && counter < 64) {
-				right += plainText.charAt(i);
+			if (cipherText.charAt(i) != ' ' && left.length() > 31 && counter < 64) {
+				right += cipherText.charAt(i);
 				counter++;
 			}					
 		}		
