@@ -38,6 +38,11 @@ public class Main
 		ArrayList<String> PICiphersDES1 = new ArrayList<String>();
 		ArrayList<String> PICiphersDES2 = new ArrayList<String>();
 		ArrayList<String> PICiphersDES3 = new ArrayList<String>();
+		ArrayList<ArrayList<String>> allPIciphersDES0 = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> allPIciphersDES1 = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> allPIciphersDES2 = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> allPIciphersDES3 = new ArrayList<ArrayList<String>>();
+		int sum, average;
 
 		try
 		{
@@ -114,31 +119,62 @@ public class Main
 
 				//Create plaintextPI -- (64 different plaintexts differing by 1 bit from original plaintext)
 				plainTextI = avalanche.permutePByOneBit(plainText);
-				ArrayList finalList = new ArrayList<String>();
+				//				ArrayList finalList = new ArrayList<String>();
 
-				//for (int i = 0; i < plainTextI.size(); i++) {
+				for (int i = 0; i < plainTextI.size(); i++) {
+					//Encrypt P1 under K
+					PICiphersDES0 = encryption.encrypt(plainTextI.get(i), key, 0, outPutFileName);
+					PICiphersDES1 = encryption.encrypt(plainTextI.get(i), key, 1, outPutFileName);
+					PICiphersDES2 = encryption.encrypt(plainTextI.get(i), key, 2, outPutFileName);
+					PICiphersDES3 = encryption.encrypt(plainTextI.get(i), key, 3, outPutFileName);
 
 
-				//Encrypt P1 under K
-				PICiphersDES0 = encryption.encrypt(plainTextI.get(0), key, 0, outPutFileName);
-				PICiphersDES1 = encryption.encrypt(plainTextI.get(0), key, 1, outPutFileName);
-				PICiphersDES2 = encryption.encrypt(plainTextI.get(0), key, 2, outPutFileName);
-				PICiphersDES3 = encryption.encrypt(plainTextI.get(0), key, 3, outPutFileName);
+					//allPIciphersDES0 is an array list, containing 64 rows and 16 columns 
+					//the first 'row' contains the plaintext altered by one bit, and each 'column' or index at this row 
+					//is the result after each of the 16 rounds
+					allPIciphersDES0.add(PICiphersDES0);
+					allPIciphersDES1.add(PICiphersDES1);
+					allPIciphersDES2.add(PICiphersDES2);
+					allPIciphersDES3.add(PICiphersDES3);
 
-				finalList.add(PICiphersDES0);
-				//}
-				
+
+				}
+
+
+
+				int sumOfBitDifferences = 0;
 				//Compare ciphers produced at each round : for all des
 				System.out.println("Round      DES0     DES1     DES2     DES3");
-				for (int i = 0; i < plaintextCiphersDES0.size(); i++) {
-					
-				System.out.println(i+ "           " +
-				simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES0.get(i), PICiphersDES0.get(i)) + "        " +
-				simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES1.get(i), PICiphersDES1.get(i)) + "        " +
-				simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES2.get(i), PICiphersDES2.get(i)) + "        " +
-				simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES3.get(i), PICiphersDES3.get(i)));
+				ArrayList<Integer> averages = new ArrayList<Integer>();
+				for (int i = 0; i < plaintextCiphersDES0.size(); i++) {//for each of the 16 rounds
+					for (int j = 0; j < allPIciphersDES0.size(); j++) {//for all 64 different plaintext variations
+
+
+						sumOfBitDifferences += 
+								simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES0.get(i), 
+										allPIciphersDES0.get(j).get(i));
+					}
+					sum = sumOfBitDifferences;
+					average = calculateAverage(sum, 16);
+					//need to store every average in an array
+					averages.add(average);
+
+					//Reset these variables for the next round
+					average = 0;
+					sumOfBitDifferences =0;
+					sum=0;
+				}
+
+				for (int i = 0; i < averages.size(); i++) {
+					System.out.println(i + "          " + averages.get(i));
 				}
 			}
+
+
+
+
+
+
 			else if (choice == '1')
 			{
 				//Run Decryption
@@ -152,6 +188,10 @@ public class Main
 
 	}
 
+	public static int calculateAverage(int sum, int count) {
+
+		return sum / count;
+	}
 
 	public static int simpleXORTOFindNumberOfBitDifferences(String plainText, String plainTextI) {
 		int bitDifferences = 0;
