@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 
 /**
@@ -23,10 +24,21 @@ public class Main
 		char choice = ' ';
 		String inputFileName = "inputFile.txt";
 		String outPutFileName = "outputFile.txt";
-		Encryption encrypt;
+		Encryption encryption;
 		Input scanner;
 		String plainText = "";
 		String key = "";
+		ArrayList<String> plaintextCiphersDES0 = new ArrayList<String>();
+		ArrayList<String> plaintextCiphersDES1 = new ArrayList<String>();
+		ArrayList<String> plaintextCiphersDES2 = new ArrayList<String>();
+		ArrayList<String> plaintextCiphersDES3 = new ArrayList<String>();
+		ArrayList<String> plainTextI = new ArrayList<String>();
+		Avalanche avalanche = new Avalanche();
+		ArrayList<String> PICiphersDES0 = new ArrayList<String>();
+		ArrayList<String> PICiphersDES1 = new ArrayList<String>();
+		ArrayList<String> PICiphersDES2 = new ArrayList<String>();
+		ArrayList<String> PICiphersDES3 = new ArrayList<String>();
+
 		try
 		{
 			if(args.length==0)
@@ -92,14 +104,40 @@ public class Main
 			if(choice == '0' )
 			{
 				//Run Encryption
-				encrypt = new Encryption(plainText,key);
-				encrypt.Encrypt(plainText, key, 0, outPutFileName);
-				encrypt.Encrypt(plainText, key, 1, outPutFileName);
-				encrypt.Encrypt(plainText, key, 2, outPutFileName);
-				encrypt.Encrypt(plainText, key, 3, outPutFileName);
+				encryption = new Encryption(plainText,key);
 
-				//KeyGeneration theKey = new KeyGeneration(key);
-				//theKey.begin();
+				//Avalanche Under P
+				plaintextCiphersDES0 =	encryption.encrypt(plainText, key, 0, outPutFileName);
+				plaintextCiphersDES1 =  encryption.encrypt(plainText, key, 1, outPutFileName);
+				plaintextCiphersDES2 =	encryption.encrypt(plainText, key, 2, outPutFileName);
+				plaintextCiphersDES3 =	encryption.encrypt(plainText, key, 3, outPutFileName);
+
+				//Create plaintextPI -- (64 different plaintexts differing by 1 bit from original plaintext)
+				plainTextI = avalanche.permutePByOneBit(plainText);
+				ArrayList finalList = new ArrayList<String>();
+
+				//for (int i = 0; i < plainTextI.size(); i++) {
+
+
+				//Encrypt P1 under K
+				PICiphersDES0 = encryption.encrypt(plainTextI.get(0), key, 0, outPutFileName);
+				PICiphersDES1 = encryption.encrypt(plainTextI.get(0), key, 1, outPutFileName);
+				PICiphersDES2 = encryption.encrypt(plainTextI.get(0), key, 2, outPutFileName);
+				PICiphersDES3 = encryption.encrypt(plainTextI.get(0), key, 3, outPutFileName);
+
+				finalList.add(PICiphersDES0);
+				//}
+				
+				//Compare ciphers produced at each round : for all des
+				System.out.println("Round      DES0     DES1     DES2     DES3");
+				for (int i = 0; i < plaintextCiphersDES0.size(); i++) {
+					
+				System.out.println(i+ "           " +
+				simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES0.get(i), PICiphersDES0.get(i)) + "        " +
+				simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES1.get(i), PICiphersDES1.get(i)) + "        " +
+				simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES2.get(i), PICiphersDES2.get(i)) + "        " +
+				simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES3.get(i), PICiphersDES3.get(i)));
+				}
 			}
 			else if (choice == '1')
 			{
@@ -113,4 +151,20 @@ public class Main
 		}
 
 	}
+
+
+	public static int simpleXORTOFindNumberOfBitDifferences(String plainText, String plainTextI) {
+		int bitDifferences = 0;
+		for (int j = 0; j < plainText.length(); j++) {
+			//When 2 input bits are not the same
+			if(plainText.charAt(j) != plainTextI.charAt(j)) {
+				//add up how many 1's are in the output from XOR operation
+				//this will be the number of bit differences
+				bitDifferences++;
+			}
+		}
+		return bitDifferences;
+	}
+
+
 }

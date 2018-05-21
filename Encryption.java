@@ -1,6 +1,7 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  *@Name : Fiona Mallett
@@ -34,11 +35,17 @@ public class Encryption{
 	private	KeyGeneration keyGeneration ;
 	private static StringBuffer outputBuffer = new StringBuffer();
 	private String prevRight = "";
+	private ArrayList<String> listOfCiphersUsingPi = new ArrayList<String>();
+	ArrayList<String> listOfCiphersUsingP = new ArrayList<String>();
+	private Avalanche avalanche = new Avalanche();
+	int number =0;
 
-	public void Encrypt(String plainText, String key, int DESVersion, String outputFileName) throws Exception { 
+	public ArrayList<String> encrypt(String plainText, String key, int DESVersion, String outputFileName) throws Exception { 
 
 		keyGeneration = new KeyGeneration(key);
 
+		//Creating a list of ciphers (produced at each round) to be used in avalanche later
+		ArrayList<String> listOfCiphersUsingP = new ArrayList<String>();
 		//Initial permutation
 		cipherText = initialPermutation.performInitialPermutation(plainText);
 
@@ -46,7 +53,7 @@ public class Encryption{
 		splitInput();
 		right = cipherText.substring(32,64);
 		left = cipherText.substring(0,32);
-		
+
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
 
@@ -66,24 +73,36 @@ public class Encryption{
 				prevRight = right;
 				roundFunctionDES3(right, round);
 			}
+
+
+
 			//XOR Left with Right, the result is the new Right
 			tempRight = XOR32Bits(left, right);
 			//32 bit swap
-			//left = right;
 			left = prevRight;
 			right = tempRight;
+
+
+			//Avalanche Effect
+			//saving ciphertext at each round for original plaintextP
+
+			listOfCiphersUsingP.add(left+right);
 		}
-		
+
 		cipherText = right+left;
+
 		//reset left and right so we can start fresh for DES1, DES2 DES3 ..
 		left = "";
 		right = "";
-		
+
 
 		//Final permutation (Inverse IP)
 		cipherText = finalPermutation.performFinalPermutation(cipherText);
-		
+
+		//return list of ciphers (produced at each round) to use in avalanche effect
 		writeToFile(outputFileName);
+		return listOfCiphersUsingP;
+
 	}
 
 	private void roundFunctionDES0(String tempRi, int roundNumber) {
@@ -98,7 +117,6 @@ public class Encryption{
 		tempRi = useSBox(tempRi);
 
 		//Permutation function(P)
-
 		right = permutation.permutationFunctionP(tempRi);
 	}
 
@@ -140,7 +158,7 @@ public class Encryption{
 
 		//S-Box replaced here for DES3
 		tempRi = inverseETable.performInversePermutation(tempRi);
-		
+
 		//final permutation missing
 	}
 
@@ -261,8 +279,6 @@ public class Encryption{
 		PrintWriter printWriter = new PrintWriter(new FileWriter(outputFileName));
 		printWriter.append(outputBuffer);
 		printWriter.close();	
-		
-		System.out.println("Printed output to " + outputFileName);
 	}
 
 	//note we should do a check for the lengths of input. ie plaintext should be 64 and key 56

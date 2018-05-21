@@ -10,7 +10,7 @@ import java.util.ArrayList;
 //to explore the avalanche effect at each round
 public class Avalanche {
 
-	public static String permutePByFirstBit(String plaintextP) {
+	public String permutePByFirstBit(String plaintextP) {
 		StringBuilder tempPermutedP = new StringBuilder();
 
 		if (plaintextP.charAt(0) == '0') {
@@ -26,7 +26,7 @@ public class Avalanche {
 		return permutedP;
 	}
 
-	public static ArrayList<String> permutePByOneBit(String plaintextP) {
+	public ArrayList<String> permutePByOneBit(String plaintextP) {
 		StringBuilder tempPermutedP = new StringBuilder();
 		ArrayList<String> listOfPermutations = new ArrayList<String>();
 
