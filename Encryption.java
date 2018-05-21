@@ -33,11 +33,7 @@ public class Encryption{
 	private InverseETable inverseETable = new InverseETable();
 	private Permutation permutation = new Permutation(); 
 	private	KeyGeneration keyGeneration ;
-	private static StringBuffer outputBuffer = new StringBuffer();
 	private String prevRight = "";
-	private ArrayList<String> listOfCiphersUsingPi = new ArrayList<String>();
-	ArrayList<String> listOfCiphersUsingP = new ArrayList<String>();
-	private Avalanche avalanche = new Avalanche();
 	int number =0;
 
 	public ArrayList<String> encrypt(String plainText, String key, int DESVersion, String outputFileName) throws Exception { 
@@ -54,15 +50,15 @@ public class Encryption{
 		right = cipherText.substring(32,64);
 		left = cipherText.substring(0,32);
 
-		
+
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
 
 			//Avalanche Effect
 			//saving ciphertext at each round for original plaintextP
 			listOfCiphersUsingP.add(left+right);
-			
-			
+
+
 			if(DESVersion == 0){
 				prevRight = right;
 				roundFunctionDES0(right, round);
@@ -79,17 +75,11 @@ public class Encryption{
 				prevRight = right;
 				roundFunctionDES3(right, round);
 			}
-
-
-
 			//XOR Left with Right, the result is the new Right
 			tempRight = XOR32Bits(left, right);
 			//32 bit swap
 			left = prevRight;
 			right = tempRight;
-
-
-
 		}
 
 		cipherText = right+left;
@@ -98,14 +88,11 @@ public class Encryption{
 		left = "";
 		right = "";
 
-
 		//Final permutation (Inverse IP)
 		cipherText = finalPermutation.performFinalPermutation(cipherText);
 
 		//return list of ciphers (produced at each round) to use in avalanche effect
-		writeToFile(outputFileName);
 		return listOfCiphersUsingP;
-
 	}
 
 	private void roundFunctionDES0(String tempRi, int roundNumber) {
@@ -258,32 +245,11 @@ public class Encryption{
 		return result.toString();
 	}
 
-
-	private static void writeToFile(String outputFileName) throws IOException {
-		//		StringBuffer outputBuffer;
-		//		outputBuffer = new StringBuffer();
-
-		outputBuffer.append("Plaintext P: " + plainText);
-		outputBuffer.append(System.getProperty("line.separator"));
-
-		outputBuffer.append("Key K: " + key);
-		outputBuffer.append(System.getProperty("line.separator"));
-
-		outputBuffer.append("Ciphertext C: " + cipherText);
-		outputBuffer.append(System.getProperty("line.separator"));
-
-		outputBuffer.append("Avalanche: " );
-		outputBuffer.append(System.getProperty("line.separator"));
-
-		printToFile(outputBuffer, outputFileName);
-	}	
-
-	public static void printToFile(StringBuffer outputBuffer, String outputFileName) throws IOException {
-		PrintWriter printWriter = new PrintWriter(new FileWriter(outputFileName));
-		printWriter.append(outputBuffer);
-		printWriter.close();	
+	public static String getCipherText() {
+		return cipherText;
 	}
 
-	//note we should do a check for the lengths of input. ie plaintext should be 64 and key 56
-	//eg whitespace, no whitespace
+	public static void setCipherText(String cipherText) {
+		Encryption.cipherText = cipherText;
+	}
 }
