@@ -54,9 +54,15 @@ public class Encryption{
 		right = cipherText.substring(32,64);
 		left = cipherText.substring(0,32);
 
+		
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
 
+			//Avalanche Effect
+			//saving ciphertext at each round for original plaintextP
+			listOfCiphersUsingP.add(left+right);
+			
+			
 			if(DESVersion == 0){
 				prevRight = right;
 				roundFunctionDES0(right, round);
@@ -83,10 +89,7 @@ public class Encryption{
 			right = tempRight;
 
 
-			//Avalanche Effect
-			//saving ciphertext at each round for original plaintextP
 
-			listOfCiphersUsingP.add(left+right);
 		}
 
 		cipherText = right+left;

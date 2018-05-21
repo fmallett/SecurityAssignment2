@@ -42,7 +42,12 @@ public class Main
 		ArrayList<ArrayList<String>> allPIciphersDES1 = new ArrayList<ArrayList<String>>();
 		ArrayList<ArrayList<String>> allPIciphersDES2 = new ArrayList<ArrayList<String>>();
 		ArrayList<ArrayList<String>> allPIciphersDES3 = new ArrayList<ArrayList<String>>();
-		int sum, average;
+		int sum0, sum1, sum2, sum3, averageDES0 = 0, averageDES1 = 0, averageDES2 = 0, averageDES3 = 0;
+
+		ArrayList<Integer> allAverages0 = new ArrayList<Integer>();
+		ArrayList<Integer> allAverages1 = new ArrayList<Integer>();
+		ArrayList<Integer> allAverages2 = new ArrayList<Integer>();
+		ArrayList<Integer> allAverages3 = new ArrayList<Integer>();
 
 		try
 		{
@@ -119,7 +124,6 @@ public class Main
 
 				//Create plaintextPI -- (64 different plaintexts differing by 1 bit from original plaintext)
 				plainTextI = avalanche.permutePByOneBit(plainText);
-				//				ArrayList finalList = new ArrayList<String>();
 
 				for (int i = 0; i < plainTextI.size(); i++) {
 					//Encrypt P1 under K
@@ -136,37 +140,73 @@ public class Main
 					allPIciphersDES1.add(PICiphersDES1);
 					allPIciphersDES2.add(PICiphersDES2);
 					allPIciphersDES3.add(PICiphersDES3);
-
-
 				}
 
 
 
-				int sumOfBitDifferences = 0;
-				//Compare ciphers produced at each round : for all des
-				System.out.println("Round      DES0     DES1     DES2     DES3");
-				ArrayList<Integer> averages = new ArrayList<Integer>();
+				int sumOfBitDifferencesDES0 = 0, sumOfBitDifferencesDES1 = 0, 
+						sumOfBitDifferencesDES2 = 0, sumOfBitDifferencesDES3 = 0;
+
+				//Compare ciphers produced at each round : for all des	
 				for (int i = 0; i < plaintextCiphersDES0.size(); i++) {//for each of the 16 rounds
 					for (int j = 0; j < allPIciphersDES0.size(); j++) {//for all 64 different plaintext variations
 
-
-						sumOfBitDifferences += 
+						sumOfBitDifferencesDES0 += 
 								simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES0.get(i), 
 										allPIciphersDES0.get(j).get(i));
-					}
-					sum = sumOfBitDifferences;
-					average = calculateAverage(sum, 16);
-					//need to store every average in an array
-					averages.add(average);
 
+
+						sumOfBitDifferencesDES1 += 
+								simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES1.get(i), 
+										allPIciphersDES1.get(j).get(i));
+
+
+						sumOfBitDifferencesDES2 += 
+								simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES2.get(i), 
+										allPIciphersDES2.get(j).get(i));
+
+						sumOfBitDifferencesDES3 += 
+								simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES3.get(i), 
+										allPIciphersDES3.get(j).get(i));
+					}
+
+					averageDES0 = calculateAverage(sumOfBitDifferencesDES0, 64);
+					averageDES1 = calculateAverage(sumOfBitDifferencesDES1, 64);
+					averageDES2 = calculateAverage(sumOfBitDifferencesDES2, 64);
+					averageDES3 = calculateAverage(sumOfBitDifferencesDES3, 64);
+
+					//need to store every average in an arrayList
+					allAverages0.add(averageDES0);
+					allAverages1.add(averageDES1);
+					allAverages2.add(averageDES2);
+					allAverages3.add(averageDES3);
 					//Reset these variables for the next round
-					average = 0;
-					sumOfBitDifferences =0;
-					sum=0;
+					averageDES0 = 0;
+					averageDES1 = 0;
+					averageDES2 = 0;
+					averageDES3 = 0;
+					sumOfBitDifferencesDES0 = 0;
+					sumOfBitDifferencesDES1 = 0;
+					sumOfBitDifferencesDES2 = 0;
+					sumOfBitDifferencesDES3 = 0;
 				}
 
-				for (int i = 0; i < averages.size(); i++) {
-					System.out.println(i + "          " + averages.get(i));
+
+				ArrayList<ArrayList<Integer>> finalAverage = new ArrayList<ArrayList<Integer>>();
+				finalAverage.add(allAverages0);
+				finalAverage.add(allAverages1);
+				finalAverage.add(allAverages2);
+				finalAverage.add(allAverages3);
+
+
+				System.out.println("Round      DES0     DES1     DES2     DES3");
+				for (int j = 0; j < 16; j++) { //for each round (16)
+
+					System.out.println(j + "         " + finalAverage.get(0).get(j)
+							+ "         " + finalAverage.get(1).get(j)
+							+ "         " + finalAverage.get(2).get(j)
+							+ "         " + finalAverage.get(3).get(j));
+					//		}
 				}
 			}
 
