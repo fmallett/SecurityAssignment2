@@ -3,16 +3,13 @@
  * @Student Number : C3187164
  * @Corse :          COMP3260
  * @Date :           13/5/18
+ *
+ * Class : PC1
+ * Purpose : Defines the PC1 Permutation for the key data which is used on a 64 bit key to produce a 56 bit key
  */
-
- /**
-  * all permutation classes use the exact same format(premutation data + an array exact same code) , these classes could be converted into 1 class
-  * and all we would have to do is call multiple methods from that class that access the specific permutation table
-  *
-  */
  public class PC1 {
 
-     int[] pc1 = {
+     private int[] pc1 = {
         57, 49, 41, 33, 25, 17,  9,
          1, 58, 50, 42, 34, 26, 18,
         10,  2, 59, 51, 43, 35, 27,
@@ -24,11 +21,16 @@
 
 
      };
-
+     /**
+      *Method : performPC1
+      *Parameters : String keyInput ~ bit string to Permeated
+      *Return type: String outPut ~ returns the Permeated bit string of 56 bits
+      *Description: builds the permeated bit string of 56 bits from a 64 bit input
+      */
      public String performPC1(String keyInput) {
          String output = "";
          //each of the 64 values in the initial permutation array will be used as an index.
-         //This value in the plaintext at each index will be added to the new string (output)
+         //This value in the keyInput at each index will be added to the new string (output)
          //to form the permuted data
          for (int i = 0; i < pc1.length; i++) {
              output += keyInput.charAt(pc1[i]-1);

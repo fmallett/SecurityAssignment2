@@ -4,6 +4,9 @@
  *@Course : COMP3260
  *@StudentNumber : 3289339
  *@Date :
+ *
+ * Class : SBox
+ *Purpose : Defines the Sbox's 1-8, applies the data manipulation for DES related to the Sbox
  */
 
 public class SBox {
@@ -64,6 +67,15 @@ public class SBox {
 			{2, 1, 14, 7 ,4 ,10, 8 ,13, 15, 12, 9, 0, 3, 5, 6, 11}
 	};
 
+	/**
+	 *Method : getSboxValue
+	 *Parameters : int SBox ~ sbox being used
+	 * 			 : String sixBits ~ reference to the selection which represents the row and column
+	 *Return type: String result ~ returns the result of the sbox selection
+	 *Description: using the input which define the sbox being used and the 6 bits provided to be the selection data
+	 * first 2 bits represent the row while the last 4 represent the column using that data
+	 * select the specified row column then calculate the result to binary
+	 */
 	public String getSboxValue(int SBox, String sixBits) {
 		int sBoxValue;
 		// Create row using the first and last bits
@@ -94,6 +106,12 @@ public class SBox {
 		return result;
 	}
 
+	/**
+	 *Method : getSBox
+	 *Parameters : int i ~ represents the sbox via index
+	 *Return type: int[][] ~ returns an sbox
+	 *Description: returns the sbox that is selected by the index i
+	 */
 	public int[][] getSBox(int i) {
 
 		if (i == 1) {

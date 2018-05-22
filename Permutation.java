@@ -4,14 +4,13 @@
  *@Course : COMP3260
  *@StudentNumber : 3289339
  *@Date :
+ *
+ * Class : Permutation
+ *Purpose : Defines the Permutation table which is used at the end of function(F)
+ *  It takes a 32 bit input and produces 32 bit output
  */
 
 public class Permutation {
-
-	/**
-	 * Used at the end of function(F)
-	 * It takes a 32 bit input and produces 32 bit output
-	 */
 
 	private int[] P =  {
 			16,  7, 20, 21, 29, 12, 28, 17,

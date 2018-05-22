@@ -4,6 +4,9 @@
  *@Course : COMP3260
  *@StudentNumber : 3289339
  *@Date :
+ *
+ * Class : ExpansionPermutation
+ * Purpose : Defines the ExpansionPermutation to be used in DES it takes a 32 bit input and provides a 48 bit output
  */
 
 public class ExpansionPermutation {
@@ -33,6 +36,12 @@ public class ExpansionPermutation {
 
 		};
 
+	/**
+	 *Method : expand
+	 *Parameters : String rightSide ~ bit string to expand
+	 *Return type: String outPut ~ returns the expanded 48 bits
+	 *Description: builds the expanded 48 bit string and returns it
+	 */
 	public String expand(String rightSide) {
 
 		//takes 32 bit input (from the right) to produce 48 bit output
@@ -44,7 +53,12 @@ public class ExpansionPermutation {
 		}
 		return output;  
 	}
-	
+	/**
+	 *Method : inverseE
+	 *Parameters : String rightSide ~ bit string to reduced
+	 *Return type: String outPut ~ returns the reduced 32 bits
+	 *Description: builds the reduced 32 bit string and returns it
+	 */
 	public String inverseE(String rightSide) {
 
 		//takes 48 bit input (after XOR function) to produce 32 bit output

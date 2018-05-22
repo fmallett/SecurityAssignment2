@@ -97,7 +97,7 @@ public class Main
 			{
 				//Run Encryption
 				encryption = new Encryption(plainText,key);
-					encryption.encrypt(plainText, key, 0, outPutFileName);
+				encryption.encrypt(plainText, key, 0, outPutFileName);
 				String cipherText = encryption.getCipherText();
 				//Calculate Avalanche
 				avalanche = new Avalanche(plainText, key, outPutFileName);

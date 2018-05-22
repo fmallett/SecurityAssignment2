@@ -4,13 +4,16 @@
  *@Course : COMP3260
  *@StudentNumber : 3289339
  *@Date :
+ *
+ * Class : InitialPermutation
+ * Purpose : Defines the Initial Permutation which is performed on the plain text before any modifications are done during des
  */
 
 public class InitialPermutation {
 
 	//This is used before the 16 rounds
 
-	public int[] IP = {
+	private int[] IP = {
 			58, 50, 42, 34, 26, 18, 10, 2,
 			60, 52, 44, 36, 28, 20, 12, 4,
 			62, 54, 46, 38, 30, 22, 14, 6,
@@ -20,7 +23,12 @@ public class InitialPermutation {
 			61, 53, 45 ,37, 29, 21, 13, 5,
 			63, 55, 47, 39, 31, 23, 15, 7
 	};
-
+	/**
+	 *Method : performInitialPermutation
+	 *Parameters : String keyInput ~ bit string to Permeated
+	 *Return type: String outPut ~ returns the Permeated bit string
+	 *Description: builds the permeated bit string
+	 */
 	public String performInitialPermutation(String plainTextInput) {
 		String output = "";
 		//each of the 64 values in the initial permutation array will be used as an index.
