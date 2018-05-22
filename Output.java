@@ -1,6 +1,7 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  *@Name Fiona Mallett
@@ -14,9 +15,10 @@ import java.io.PrintWriter;
 */
 
 public class Output {
-	
 
-	private static StringBuffer outputBuffer = new StringBuffer();
+	//Used for encryption
+
+		private static StringBuffer outputBuffer = new StringBuffer();
 
 	/**
 	 * Method : writeToFile
@@ -27,7 +29,9 @@ public class Output {
 	 * Return Type : void
  	 * Description : generate the output file's data
 	*/
-	public void writeToFile(String plainText, String key, String cipherText, String outputFileName) throws IOException {
+	public void writeToFile(String plainText, String key, String cipherText, String outputFileName,
+							ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK,
+							ArrayList<ArrayList<Integer>> avalancheResultsPunderKandKi) throws IOException {
 		//		StringBuffer outputBuffer;
 		//		outputBuffer = new StringBuffer();
 
@@ -42,6 +46,39 @@ public class Output {
 
 		outputBuffer.append("Avalanche: " );
 		outputBuffer.append(System.getProperty("line.separator"));
+
+		outputBuffer.append("P and Pi under K: " );
+		outputBuffer.append(System.getProperty("line.separator"));
+		outputBuffer.append("Round      DES0     DES1     DES2     DES3");
+		outputBuffer.append(System.getProperty("line.separator"));
+
+		//Format avalanche data in a table (P and Pi under K)
+		for (int j = 0; j < avalancheResultsPandPiUnderK.get(0).size(); j++) { //for each round (16)
+			outputBuffer.append(String.format("%-11s %-8s %-8s %-8s %-8s", j,
+					avalancheResultsPandPiUnderK.get(0).get(j),
+					avalancheResultsPandPiUnderK.get(1).get(j),
+					avalancheResultsPandPiUnderK.get(2).get(j),
+					avalancheResultsPandPiUnderK.get(3).get(j)));
+			outputBuffer.append(System.getProperty("line.separator"));
+		}
+
+		outputBuffer.append(System.getProperty("line.separator"));
+		outputBuffer.append("P under K and Ki: " );
+		outputBuffer.append(System.getProperty("line.separator"));
+		outputBuffer.append("Round      DES0     DES1     DES2     DES3");
+		outputBuffer.append(System.getProperty("line.separator"));
+
+		//Format the data in a table for avalanche P under K and Ki
+		for (int j = 0; j < avalancheResultsPunderKandKi.get(0).size(); j++) { //for each round (16)
+			outputBuffer.append(String.format("%-11s %-8s %-8s %-8s %-8s", j,
+					avalancheResultsPunderKandKi.get(0).get(j),
+					avalancheResultsPunderKandKi.get(1).get(j),
+					avalancheResultsPunderKandKi.get(2).get(j),
+					avalancheResultsPunderKandKi.get(3).get(j)));
+			outputBuffer.append(System.getProperty("line.separator"));
+		}
+
+
 
 		printToFile(outputBuffer, outputFileName);
 	}
