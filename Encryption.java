@@ -49,8 +49,7 @@ public class Encryption{
 		splitInput();
 		right = cipherText.substring(32,64);
 		left = cipherText.substring(0,32);
-
-
+	
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
 
@@ -58,31 +57,32 @@ public class Encryption{
 			//saving ciphertext at each round for original plaintextP
 			listOfCiphersUsingP.add(left+right);
 
-
+			prevRight = right;
+			
 			if(DESVersion == 0){
-				prevRight = right;
 				roundFunctionDES0(right, round);
 			}
 			else if(DESVersion == 1){
-				prevRight = right;
 				roundFunctionDES1(right, round);
 			}
 			else if(DESVersion == 2){
-				prevRight = right;
 				roundFunctionDES2(right, round);
 			}
 			else if(DESVersion == 3){
-				prevRight = right;
 				roundFunctionDES3(right, round);
 			}
 			//XOR Left with Right, the result is the new Right
 			tempRight = XOR32Bits(left, right);
-			//32 bit swap
+		
 			left = prevRight;
 			right = tempRight;
 		}
 
-		cipherText = right+left;
+		//adding the 16th round to avalanche effect
+		listOfCiphersUsingP.add(left+right);
+		
+		//32 bit swap
+		cipherText = right + left;
 
 		//reset left and right so we can start fresh for DES1, DES2 DES3 ..
 		left = "";
@@ -90,14 +90,13 @@ public class Encryption{
 
 		//Final permutation (Inverse IP)
 		cipherText = finalPermutation.performFinalPermutation(cipherText);
-
+	
 		//return list of ciphers (produced at each round) to use in avalanche effect
 		return listOfCiphersUsingP;
 	}
 
 	private void roundFunctionDES0(String tempRi, int roundNumber) {
 		//Expansion/permutation
-
 		tempRi = expansionPermutation.expand(tempRi);
 
 		//XOR with key

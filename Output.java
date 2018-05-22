@@ -38,7 +38,7 @@ public class Output {
 		outputBuffer.append(System.getProperty("line.separator"));
 		
 		//Format avalanche data in a table (P and Pi under K)
-		for (int j = 0; j < 16; j++) { //for each round (16)
+		for (int j = 0; j < avalancheResultsPandPiUnderK.get(0).size(); j++) { //for each round (16)
 			outputBuffer.append(String.format("%-11s %-8s %-8s %-8s %-8s", j,
 					avalancheResultsPandPiUnderK.get(0).get(j),
 					avalancheResultsPandPiUnderK.get(1).get(j),
@@ -54,7 +54,7 @@ public class Output {
 		outputBuffer.append(System.getProperty("line.separator"));
 		
 		//Format the data in a table for avalanche P under K and Ki
-		for (int j = 0; j < 16; j++) { //for each round (16)
+		for (int j = 0; j < avalancheResultsPunderKandKi.get(0).size(); j++) { //for each round (16)
 			outputBuffer.append(String.format("%-11s %-8s %-8s %-8s %-8s", j,
 					avalancheResultsPunderKandKi.get(0).get(j),
 					avalancheResultsPunderKandKi.get(1).get(j),

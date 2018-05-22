@@ -133,16 +133,7 @@ public class Avalanche {
 		finalAveragePandPiUnderK.add(allAverages1);
 		finalAveragePandPiUnderK.add(allAverages2);
 		finalAveragePandPiUnderK.add(allAverages3);
-		System.out.println("P and Pi under K");
-		System.out.println("Round      DES0     DES1     DES2     DES3");
-		for (int j = 0; j < 16; j++) { //for each round (16)
 
-			System.out.println(j + "         " + finalAveragePandPiUnderK.get(0).get(j)
-					+ "         " + finalAveragePandPiUnderK.get(1).get(j)
-					+ "         " + finalAveragePandPiUnderK.get(2).get(j)
-					+ "         " + finalAveragePandPiUnderK.get(3).get(j));
-			//		}
-		}
 		calculateAvalancheWhenKeyChanges();
 		return finalAveragePandPiUnderK;
 	}
@@ -256,17 +247,6 @@ public class Avalanche {
 		finalAveragePUnderKandKi.add(allAverages1);
 		finalAveragePUnderKandKi.add(allAverages2);
 		finalAveragePUnderKandKi.add(allAverages3);
-
-		System.out.println("P Under K and Ki");
-		System.out.println("Round      DES0     DES1     DES2     DES3");
-		for (int j = 0; j < 16; j++) { //for each round (16)
-
-			System.out.println(j + "         " + finalAveragePUnderKandKi.get(0).get(j)
-					+ "         " + finalAveragePUnderKandKi.get(1).get(j)
-					+ "         " + finalAveragePUnderKandKi.get(2).get(j)
-					+ "         " + finalAveragePUnderKandKi.get(3).get(j));
-			//		}
-		}
 	}
 
 	public static int calculateAverage(int sum, int count) {
