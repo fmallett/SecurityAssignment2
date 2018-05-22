@@ -22,9 +22,9 @@ private int[] pc2 = {
 
         /**
          *Method : performPC2
-         *Parameters : String appendedCDkey ~ bit string to Permeated
-         *Return type: String outPut ~ returns the Permeated bit string of 48 bits
-         *Description: builds the permeated bit string of 48 bits from a 56 bit input
+         *Parameters : String appendedCDkey ~ bit string to be permuted
+         *Return type: String outPut ~ returns the permuted bit string of 48 bits
+         *Description: builds the permuted bit string of 48 bits from a 56 bit input
          */
 public String performPC2 (String appendedCDkey) {
         String output = "";

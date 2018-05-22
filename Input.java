@@ -1,5 +1,4 @@
 import java.io.InputStream;
-import java.util.ArrayList;
 
 /**
  * @Name :           Nathan Davidson
@@ -58,7 +57,7 @@ public class Input
             choice = (char) inputCharByte; // first point of data is casted from byte value to a real value
 
 
-        if(choice == '1' || choice == '0') // should be the "choice" so we check if tis 1 or 0
+        if(choice == '1' || choice == '0') // should be the "choice" so we check if this 1 or 0
         {
             //filter out enter and line feed char after the encryption (0) or decryption (1) on the first line
 
@@ -161,7 +160,7 @@ public class Input
 
         else if (inputCharByte == 9 || inputCharByte == 32) // tab & space
         {
-            // ingore current input its a space or a tab by forcing a read of the inputstream (gets next char)
+            // ignore current input its a space or a tab by forcing a read of the inputstream (gets next char)
             inputCharByte = inputStream.read();
         }
 

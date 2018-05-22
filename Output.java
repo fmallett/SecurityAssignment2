@@ -26,8 +26,8 @@ public class Output {
 	 *			  : String key ~ the key data
 	 *			  : String cipherText ~ the ciphertext data
 	 *			  : String outputFileName ~ outputfile name
-	 *			  : ArrayList avalanche results under K
-	 *			  : ArrayList avalanche results under Ki
+	 *			  : ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK ~ 
+	 *			  : ArrayList<ArrayList<Integer>> avalancheResultsPunderKandKi ~
 	 * Return Type : void
  	 * Description : generate the output file's data
 	*/
