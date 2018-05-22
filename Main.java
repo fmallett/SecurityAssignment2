@@ -93,18 +93,22 @@ public class Main
 				System.out.println(plainText + "\n" + key + " " + plainText.length() + " " + key.length());
 
 			}
-			if(choice == '0' )
+			if(choice == '0')
 			{
 				//Run Encryption
 				encryption = new Encryption(plainText,key);
-					encryption.encrypt(plainText, key, 0, outPutFileName);
+				encryption.encrypt(plainText, key, 0, outPutFileName);
 				String cipherText = encryption.getCipherText();
 				//Calculate Avalanche
 				avalanche = new Avalanche(plainText, key, outPutFileName);
-				avalanche.calculateAvalanche();
+				avalanche.calculateAvalancheWhenPChanges();
+				
+				ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK = avalanche.getFinalAveragePandPiUnderK();
+				ArrayList<ArrayList<Integer>> avalancheResultsPUnderKandKi =  avalanche.getFinalAveragePUnderKandKi();
+			
 				
 				output = new Output();
-				output.writeToFile(plainText, key, cipherText, outPutFileName);
+				output.writeToFile(plainText, key, cipherText, outPutFileName, avalancheResultsPandPiUnderK, avalancheResultsPUnderKandKi);
 
 			}
 			else if (choice == '1')

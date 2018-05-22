@@ -16,10 +16,13 @@ public class Avalanche {
 		this.plainText = plainText;
 		this.outputFile = outputFile;
 	}
-	
-	String key, plainText, outputFile;
 
-	public void calculateAvalanche() throws Exception {
+	String key, plainText, outputFile;
+	private ArrayList<ArrayList<Integer>> finalAveragePandPiUnderK = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Integer>> finalAveragePUnderKandKi = new ArrayList<ArrayList<Integer>>();
+	
+
+	public ArrayList<ArrayList<Integer>> calculateAvalancheWhenPChanges() throws Exception {
 		Encryption encryption = new Encryption(plainText, key);
 
 		ArrayList<String> plaintextCiphersDES0 = new ArrayList<String>();
@@ -80,8 +83,8 @@ public class Avalanche {
 				//We compare plaintext at round 1 with the first Pi at round 1, 
 				//then the second Pi at round 1 ..up until all 64Pi
 				//The result is the total number of differing bits at each round
-				
-				
+
+
 				//First for DES0
 				sumOfBitDifferencesDES0 += 
 						simpleXORTOFindNumberOfBitDifferences(plaintextCiphersDES0.get(i), 
@@ -112,7 +115,7 @@ public class Avalanche {
 			allAverages1.add(averageDES1);
 			allAverages2.add(averageDES2);
 			allAverages3.add(averageDES3);
-			
+
 			//Reset these variables for the next round
 			averageDES0 = 0;
 			averageDES1 = 0;
@@ -126,29 +129,150 @@ public class Avalanche {
 
 		//After looping through all 64 plaintexts, 16 rounds and 4 versions of Des
 		//Store all the averages in a 2d arraylist 
-		ArrayList<ArrayList<Integer>> finalAverage = new ArrayList<ArrayList<Integer>>();
-		finalAverage.add(allAverages0);
-		finalAverage.add(allAverages1);
-		finalAverage.add(allAverages2);
-		finalAverage.add(allAverages3);
-
+		finalAveragePandPiUnderK.add(allAverages0);
+		finalAveragePandPiUnderK.add(allAverages1);
+		finalAveragePandPiUnderK.add(allAverages2);
+		finalAveragePandPiUnderK.add(allAverages3);
+		System.out.println("P and Pi under K");
 		System.out.println("Round      DES0     DES1     DES2     DES3");
 		for (int j = 0; j < 16; j++) { //for each round (16)
 
-			System.out.println(j + "         " + finalAverage.get(0).get(j)
-					+ "         " + finalAverage.get(1).get(j)
-					+ "         " + finalAverage.get(2).get(j)
-					+ "         " + finalAverage.get(3).get(j));
+			System.out.println(j + "         " + finalAveragePandPiUnderK.get(0).get(j)
+					+ "         " + finalAveragePandPiUnderK.get(1).get(j)
+					+ "         " + finalAveragePandPiUnderK.get(2).get(j)
+					+ "         " + finalAveragePandPiUnderK.get(3).get(j));
 			//		}
 		}
+		calculateAvalancheWhenKeyChanges();
+		return finalAveragePandPiUnderK;
+	}
 
+	public void calculateAvalancheWhenKeyChanges () throws Exception {
+		Encryption encryption = new Encryption(plainText, key);
+
+		ArrayList<String> originalKeyCiphersDES0 = new ArrayList<String>();
+		ArrayList<String> originalKeyCiphersDES1 = new ArrayList<String>();
+		ArrayList<String> originalKeyCiphersDES2 = new ArrayList<String>();
+		ArrayList<String> originalKeyCiphersDES3 = new ArrayList<String>();
+		ArrayList<String> keysI = new ArrayList<String>();
+		AvalanchePermutations avalanche = new AvalanchePermutations();
+		ArrayList<String> KiCiphersDES0 = new ArrayList<String>();
+		ArrayList<String> KiCiphersDES1 = new ArrayList<String>();
+		ArrayList<String> KiCiphersDES2 = new ArrayList<String>();
+		ArrayList<String> KiCiphersDES3 = new ArrayList<String>();
+		ArrayList<ArrayList<String>> allKiciphersDES0 = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> allKiciphersDES1 = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> allKiciphersDES2 = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> allKiciphersDES3 = new ArrayList<ArrayList<String>>();
+		int averageDES0 = 0, averageDES1 = 0, averageDES2 = 0, averageDES3 = 0;
+
+		ArrayList<Integer> allAverages0 = new ArrayList<Integer>();
+		ArrayList<Integer> allAverages1 = new ArrayList<Integer>();
+		ArrayList<Integer> allAverages2 = new ArrayList<Integer>();
+		ArrayList<Integer> allAverages3 = new ArrayList<Integer>();
+
+		//Avalanche Under P (plaintext) for each version of DES (DES0, DES1 ..)
+		originalKeyCiphersDES0 =	encryption.encrypt(plainText, key, 0, outputFile);
+		originalKeyCiphersDES1 =  encryption.encrypt(plainText, key, 1, outputFile);
+		originalKeyCiphersDES2 =	encryption.encrypt(plainText, key, 2, outputFile);
+		originalKeyCiphersDES3 =	encryption.encrypt(plainText, key, 3, outputFile);
+
+		//Create Ki possible keys
+		keysI = avalanche.permutePByOneBit(key);
+
+		for (int i = 0; i < keysI.size(); i++) {
+			//Encrypt P under Ki for each DES version
+			KiCiphersDES0 = encryption.encrypt(plainText, keysI.get(i), 0, outputFile);
+			KiCiphersDES1 = encryption.encrypt(plainText, keysI.get(i), 1, outputFile);
+			KiCiphersDES2 = encryption.encrypt(plainText, keysI.get(i), 2, outputFile);
+			KiCiphersDES3 = encryption.encrypt(plainText, keysI.get(i), 3, outputFile);
+
+			//the result after each of the 16 rounds is stored in an arrayList of arraylists
+			allKiciphersDES0.add(KiCiphersDES0);
+			allKiciphersDES1.add(KiCiphersDES1);
+			allKiciphersDES2.add(KiCiphersDES2);
+			allKiciphersDES3.add(KiCiphersDES3);
+		}
+
+		//variables used to calculate average number of bit changes
+		int sumOfBitDifferencesDES0 = 0, sumOfBitDifferencesDES1 = 0, 
+				sumOfBitDifferencesDES2 = 0, sumOfBitDifferencesDES3 = 0;
+
+		//Compare ciphers produced at each round : for all des	
+		for (int i = 0; i < originalKeyCiphersDES0.size(); i++) {//for each of the 16 rounds
+			for (int j = 0; j < allKiciphersDES0.size(); j++) {//for all 64 different plaintext variations
+
+				//store the sum of how many bits differ 
+				//We compare plaintext at round 1 with the first Ki at round 1, 
+				//then the second Ki at round 1 ..up until all 56Ki
+				//The result is the total number of differing bits at each round
+
+
+				//First for DES0
+				sumOfBitDifferencesDES0 += 
+						simpleXORTOFindNumberOfBitDifferences(originalKeyCiphersDES0.get(i), 
+								allKiciphersDES0.get(j).get(i));
+
+				//Repeated for each version of DES
+				sumOfBitDifferencesDES1 += 
+						simpleXORTOFindNumberOfBitDifferences(originalKeyCiphersDES1.get(i), 
+								allKiciphersDES1.get(j).get(i));
+
+				sumOfBitDifferencesDES2 += 
+						simpleXORTOFindNumberOfBitDifferences(originalKeyCiphersDES2.get(i), 
+								allKiciphersDES2.get(j).get(i));
+
+				sumOfBitDifferencesDES3 += 
+						simpleXORTOFindNumberOfBitDifferences(originalKeyCiphersDES3.get(i), 
+								allKiciphersDES3.get(j).get(i));
+			}
+
+			//Calculate the average number of bit differences at each round and each version of DES
+			averageDES0 = calculateAverage(sumOfBitDifferencesDES0, 56);
+			averageDES1 = calculateAverage(sumOfBitDifferencesDES1, 56);
+			averageDES2 = calculateAverage(sumOfBitDifferencesDES2, 56);
+			averageDES3 = calculateAverage(sumOfBitDifferencesDES3, 56);
+
+			//need to store every average in an arrayList
+			allAverages0.add(averageDES0);
+			allAverages1.add(averageDES1);
+			allAverages2.add(averageDES2);
+			allAverages3.add(averageDES3);
+
+			//Reset these variables for the next round
+			averageDES0 = 0;
+			averageDES1 = 0;
+			averageDES2 = 0;
+			averageDES3 = 0;
+			sumOfBitDifferencesDES0 = 0;
+			sumOfBitDifferencesDES1 = 0;
+			sumOfBitDifferencesDES2 = 0;
+			sumOfBitDifferencesDES3 = 0;
+		}
+
+		//After looping through all 56 keys, 16 rounds and 4 versions of Des
+		//Store all the averages in a 2d arraylist 
+		finalAveragePUnderKandKi.add(allAverages0);
+		finalAveragePUnderKandKi.add(allAverages1);
+		finalAveragePUnderKandKi.add(allAverages2);
+		finalAveragePUnderKandKi.add(allAverages3);
+
+		System.out.println("P Under K and Ki");
+		System.out.println("Round      DES0     DES1     DES2     DES3");
+		for (int j = 0; j < 16; j++) { //for each round (16)
+
+			System.out.println(j + "         " + finalAveragePUnderKandKi.get(0).get(j)
+					+ "         " + finalAveragePUnderKandKi.get(1).get(j)
+					+ "         " + finalAveragePUnderKandKi.get(2).get(j)
+					+ "         " + finalAveragePUnderKandKi.get(3).get(j));
+			//		}
+		}
 	}
 
 	public static int calculateAverage(int sum, int count) {
 		return sum / count;
 	}
 
-	
 	//Calculates the total number of bits which differ in the 2 input variables
 	//it uses xor but instead of returning the xor result, it returns the total which is used to 
 	//calculate the average for avalanche
@@ -165,4 +289,13 @@ public class Avalanche {
 		return bitDifferences;
 	}
 
+	
+	//Getters used for printing
+	public ArrayList<ArrayList<Integer>> getFinalAveragePandPiUnderK() {
+		return finalAveragePandPiUnderK;
+	}
+
+	public ArrayList<ArrayList<Integer>> getFinalAveragePUnderKandKi() {
+		return finalAveragePUnderKandKi;
+	}
 }
