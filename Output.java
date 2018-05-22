@@ -26,6 +26,8 @@ public class Output {
 	 *			  : String key ~ the key data
 	 *			  : String cipherText ~ the chiper text data
 	 *			  : String outputFileName ~ outputfile name
+	 *			  : ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK ~ 
+	 *			  : ArrayList<ArrayList<Integer>> avalancheResultsPunderKandKi ~
 	 * Return Type : void
  	 * Description : generate the output file's data
 	*/

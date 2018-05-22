@@ -25,6 +25,7 @@ public class Main
 		String inputFileName = "inputFile.txt";
 		String outPutFileName = "outputFile.txt";
 		Encryption encryption;
+		Decryption decryption;
 		Input scanner;
 		String plainText = "";
 		String key = "";
@@ -114,6 +115,7 @@ public class Main
 			else if (choice == '1')
 			{
 				//Run Decryption
+				decryption = new Decryption(plainText,key,outPutFileName);
 			}
 		}
 		catch (Exception e)
