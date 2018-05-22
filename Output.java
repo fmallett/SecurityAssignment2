@@ -16,8 +16,6 @@ import java.util.ArrayList;
 
 public class Output {
 
-	//Used for encryption
-
 		private static StringBuffer outputBuffer = new StringBuffer();
 
 	/**
@@ -31,11 +29,15 @@ public class Output {
 	 * Return Type : void
  	 * Description : generate the output file's data
 	*/
-	public void writeToFile(String plainText, String key, String cipherText, String outputFileName,
+	//Used for encryption
+	public void writeToFileEncryption(String plainText, String key, String cipherText, String outputFileName,
 							ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK,
 							ArrayList<ArrayList<Integer>> avalancheResultsPunderKandKi) throws IOException {
 
 		//Add everything we want to display to the output buffer
+		outputBuffer.append("ENCRYPTION");
+		outputBuffer.append(System.getProperty("line.separator"));
+
 		outputBuffer.append("Plaintext P: " + plainText);
 		outputBuffer.append(System.getProperty("line.separator"));
 
@@ -82,6 +84,29 @@ public class Output {
 		//After everything is added to the buffer, print to a file
 		printToFile(outputBuffer, outputFileName);
 	}
+	
+	//Used for decryption
+	//Notice the different ordering of paramters and output
+		public void writeToFileDecryption(String cipherText, String key, String plainText, String outputFileName) throws IOException {
+							
+			//Add everything we want to display to the output buffer
+			outputBuffer.append("DECRYPTION");
+			outputBuffer.append(System.getProperty("line.separator"));
+
+			outputBuffer.append("Ciphertext C: " + cipherText);
+			outputBuffer.append(System.getProperty("line.separator"));
+			
+			outputBuffer.append("Key K: " + key);
+			outputBuffer.append(System.getProperty("line.separator"));
+
+			outputBuffer.append("Plaintext P: " + plainText);
+			outputBuffer.append(System.getProperty("line.separator"));
+
+			//After everything is added to the buffer, print to a file
+			printToFile(outputBuffer, outputFileName);
+		}
+	
+	
 	/**
 	 * Method : printToFile
 	 * Parameters  : StringBuffer outputBuffer ~ output file buffer writer

@@ -1,65 +1,101 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
+import java.util.ArrayList;
+
 
 /**
- *@Name : Fiona Mallett
- *@Course : COMP3260
- *@StudentNumber : 3289339
- *@Date :
+ * @Name :           Nathan Davidson
+ * @Student Number : C3187164
+ * @Corse :          COMP3260
+ * @Date :           12/5/18
  */
 
-public class Application {
+public class Application
+{
+	public static void main(String[] args)
+	{
+		/**args 0 = decryption or encryption denoted d or e (ignoring case) been over ruled changed to reading first line of file for a 0 or a 1
+          args 1 = input file name
+          args 2 = output file name
+		 */
+		String input = "";
 
-	private static String plaintext, key;
-	private static Encryption encrypt;
-	/**
-	 * @param args
-	 * @throws Exception 
-	 */
-	public static void main(String[] args) throws Exception {
+		char choice = ' ';
+		String inputFileName = "inputFile.txt";
+		String outPutFileName = "outputFile.txt";
+		Encryption encryption;
+		Decryption decryption;
+		Input scanner;
+		String plainText = "";
+		String key = "";
+		Avalanche avalanche;
+		Output output;
 
-		if(args.length > 0) {
-			plaintext = getPlainText(args[0]);
-			key = getKey(args[0]);
+		try
+		{
+			if(args.length==0)
+			{
+				//Error
+				System.out.println("No arguments provided, Please provide a" + "Input file name \n" + "and a Output file name");
+			}
+			else
+			{
+				if(args.length>0) // they have provided a file name
+				{
+					inputFileName=args[0];
+				}
+				else
+				{
+					//Error cant assume inputfile name
+				}
 
+				if(args.length>1) // they have provided a file name
+				{
+					outPutFileName =args[1];
+					System.out.println("im equal to outPutFileName "+ args[1]);
+				}
+				else
+				{
+					System.out.println("Default output file name is :"+outPutFileName);
+				}
 
-			System.out.println("Plaintext P: " + plaintext);
-			System.out.println("Key K: " + key);
-			encrypt = new Encryption (plaintext, key);
-//			encrypt.Encrypt(plaintext, key, 0);
-//			encrypt.Encrypt(plaintext, key, 1);
-//			encrypt.Encrypt(plaintext, key, 2);
-//			encrypt.Encrypt(plaintext, key, 3);
-		
+				InputStream FileInputStream = new FileInputStream(inputFileName);
+				scanner = new Input(FileInputStream);
+				plainText = scanner.getpText();
+				key = scanner.getsKey();
+				choice = scanner.getChoice();
+			}
+			if(choice == '0')
+			{
+				//Run Encryption
+				encryption = new Encryption(plainText,key);
+				encryption.encrypt(plainText, key, 0, outPutFileName);
+				String cipherText = encryption.getCipherText();
+				//Calculate Avalanche
+				avalanche = new Avalanche(plainText, key, outPutFileName);
+				avalanche.calculateAvalancheWhenPChanges();
+				
+				//Store avalanche results in arrayList variables
+				ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK = avalanche.getFinalAveragePandPiUnderK();
+				ArrayList<ArrayList<Integer>> avalancheResultsPUnderKandKi =  avalanche.getFinalAveragePUnderKandKi();
+			
+				//Write to output class
+				output = new Output();
+				output.writeToFileEncryption(plainText, key, cipherText, outPutFileName, avalancheResultsPandPiUnderK, avalancheResultsPUnderKandKi);
+			}
+			
+			else if (choice == '1')
+			{
+				//Run Decryption
+				decryption = new Decryption(plainText,key,outPutFileName);
+				//Write to output class
+				output = new Output();
+				output.writeToFileDecryption(decryption.getCipherText(), key, decryption.getPlainText(), outPutFileName);
+			}
 		}
-		else {
-			System.err.println("No input file to read, please provide it");	
-
-
-			plaintext = getPlainText("C:/Users/user/workspace/DESS/src/input.txt");
-			key = getKey("C:/Users/user/workspace/DESS/src/input.txt");
-
-			System.out.println("Plaintext: " + plaintext);
-			System.out.println("Key: " + key);
-			encrypt = new Encryption (plaintext, key);
-//			encrypt.Encrypt(plaintext, key, 0);
-//			encrypt.Encrypt(plaintext, key, 1);
-//			encrypt.Encrypt(plaintext, key, 2);
-//			encrypt.Encrypt(plaintext, key, 3);
+		catch (Exception e)
+		{
+			System.out.println("Error with file handling, please ensure a valid data file was provided in the same location as the compiled java files");
+			e.printStackTrace();
 		}
-	}
-
-
-
-	public static String getPlainText(String args) throws IOException {
-		//change this to args[0] -- this is just for debugging in Eclipse
-		plaintext = Files.readAllLines(Paths.get(args)).get(0);
-		return plaintext;
-	}
-
-	public static String getKey(String args) throws IOException {
-		key = Files.readAllLines(Paths.get(args)).get(1);
-		return key;
 	}
 }

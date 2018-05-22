@@ -14,8 +14,7 @@ public class Decryption {
     private String plainText;
     private String key;
     private String cipherText;
-
-    private String left = "";
+	private String left = "";
     private String right = "";
     private String tempRight = "";
     private String prevRight = "";
@@ -221,8 +220,15 @@ public class Decryption {
         System.out.println("PlainText : " +plainText);
         System.out.println("Key :" + key);
         System.out.println("CipherText " + cipherText);
-
     }
 
+    //Getter for printing
+    public String getCipherText() {
+		return cipherText;
+	}
+    //Getter for printing
+    public String getPlainText() {
+		return plainText;
+	}
 
 }

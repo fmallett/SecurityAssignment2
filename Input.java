@@ -7,7 +7,7 @@ import java.io.InputStream;
  * @Date :           8/5/18
  *
  * Class : Input
- * Purpose : Reads an input file using input stream and stores the data in as string for outside access
+ * Purpose : Reads an input file using input stream and stores the data in a string for outside access
  *
  * structure of an input file is :
  * 0 or 1
