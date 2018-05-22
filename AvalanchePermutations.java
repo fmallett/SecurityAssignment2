@@ -6,32 +6,17 @@ import java.util.ArrayList;
  *@StudentNumber 3289339
  *@Date 19/05/2019
  */
-//The purpose of this class is to permute the plaintext and key by one bit each 
+//The purpose of this class is to permute the plaintext and key by one bit in each round
+//starting at bit 0, then bit 1, bit 2,  ... bit 63 (for plaintext) and 55 for key
 //to explore the avalanche effect at each round
 public class AvalanchePermutations {
-
-	public String permutePByFirstBit(String plaintextP) {
-		StringBuilder tempPermutedP = new StringBuilder();
-
-		if (plaintextP.charAt(0) == '0') {
-			//Change the first zero to one, then append the rest of the string
-			tempPermutedP.append("1" + plaintextP.substring(1, plaintextP.length()));
-		}
-		else {
-			// if the first bit is a one, then change it to a zero and append the rest of the string
-			tempPermutedP.append("0" + plaintextP.substring(1, plaintextP.length()));
-		}
-
-		String permutedP = tempPermutedP.toString();
-		return permutedP;
-	}
 
 	public ArrayList<String> permutePByOneBit(String plaintextP) {
 		StringBuilder tempPermutedP = new StringBuilder();
 		ArrayList<String> listOfPermutations = new ArrayList<String>();
 
-		//This will loop through the length of the plaintext (64 bits assumed)
-		//It permutes one bit each round and store the result (Pi) each time in an arraylist
+		//This will loop through the length of the plaintext (64 bits assumed) (56 for key)
+		//It permutes one bit each round and stores the result (Pi) each time in an arraylist
 		//E.g. round 1 the first but will be permuted
 		//round 2 only the 2nd bit will be permuted 
 		//if the plaintext input was : 1111

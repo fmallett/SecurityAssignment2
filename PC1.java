@@ -23,8 +23,8 @@
      };
      /**
       *Method : performPC1
-      *Parameters : String keyInput ~ bit string to Permeated
-      *Return type: String outPut ~ returns the Permeated bit string of 56 bits
+      *Parameters : String keyInput ~ bit string to permuted
+      *Return type: String outPut ~ returns the permuted bit string of 56 bits
       *Description: builds the permeated bit string of 56 bits from a 64 bit input
       */
      public String performPC1(String keyInput) {

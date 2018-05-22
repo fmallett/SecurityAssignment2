@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 
 //This class calculates the average avalanche effect at each of the 16 rounds
-//and each version of DES (DES0, DES1, DES2, DES3) comapred with the original plaintext
+//and each version of DES (DES0, DES1, DES2, DES3) compared with the original plaintext
 
 public class Avalanche {
 	public Avalanche(String plainText, String key, String outputFile) {
@@ -194,7 +194,7 @@ public class Avalanche {
 			for (int j = 0; j < allKiciphersDES0.size(); j++) {//for all 64 different plaintext variations
 
 				//store the sum of how many bits differ 
-				//We compare plaintext at round 1 with the first Ki at round 1, 
+				//We compare plaintext at round 0 with the first Key at round 0, 
 				//then the second Ki at round 1 ..up until all 56Ki
 				//The result is the total number of differing bits at each round
 

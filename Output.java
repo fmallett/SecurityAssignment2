@@ -10,8 +10,8 @@ import java.util.ArrayList;
  *@Date 21/05/2018
  *
  * Class : Output
- * Purpose : output the plaintext key and cipher text along with the avalanche effect to be displayed in to a file
-
+ * Purpose : output the plaintext, key and cipher text for encryption and decryption.
+ * Avalanche effect to be displayed also in a textfile
 */
 
 public class Output {
@@ -24,17 +24,18 @@ public class Output {
 	 * Method : writeToFile
  	 * Parameters : String plainText ~ the plain text data
 	 *			  : String key ~ the key data
-	 *			  : String cipherText ~ the chiper text data
+	 *			  : String cipherText ~ the ciphertext data
 	 *			  : String outputFileName ~ outputfile name
+	 *			  : ArrayList avalanche results under K
+	 *			  : ArrayList avalanche results under Ki
 	 * Return Type : void
  	 * Description : generate the output file's data
 	*/
 	public void writeToFile(String plainText, String key, String cipherText, String outputFileName,
 							ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK,
 							ArrayList<ArrayList<Integer>> avalancheResultsPunderKandKi) throws IOException {
-		//		StringBuffer outputBuffer;
-		//		outputBuffer = new StringBuffer();
 
+		//Add everything we want to display to the output buffer
 		outputBuffer.append("Plaintext P: " + plainText);
 		outputBuffer.append(System.getProperty("line.separator"));
 
@@ -77,9 +78,8 @@ public class Output {
 					avalancheResultsPunderKandKi.get(3).get(j)));
 			outputBuffer.append(System.getProperty("line.separator"));
 		}
-
-
-
+		
+		//After everything is added to the buffer, print to a file
 		printToFile(outputBuffer, outputFileName);
 	}
 	/**

@@ -3,9 +3,11 @@
  *@Name Fiona Mallett
  *@Course Computer Science
  *@StudentNumber 3289339
+ *@Date 7/05/2018
  *
  * Class : InverseETable
- * Purpose : Defines the InverseETable which is defined in the assignment spec to be used with DES2 and 3
+ * Purpose : Defines the InverseETable which is defined in the assignment spec to be
+ * used with DES2 and DES3
  * takes a 32 bit input and provides a 32 bit output
 */
 
@@ -27,9 +29,9 @@ public class InverseETable {
 
 	/**
 	 *Method : performInversePermutation
-	 *Parameters : String plainTextInput ~ bit string to Permeated
-	 *Return type: String outPut ~ returns the Permeated bit string
-	 *Description: builds the permeated bit string
+	 *Parameters : String plainTextInput ~ bit string to be permuted
+	 *Return type: String outPut ~ returns the permuted bit string
+	 *Description: builds the permuted bit string
 	 */
 	public String performInversePermutation(String plainTextInput) {
 		String output = "";
@@ -40,8 +42,4 @@ public class InverseETable {
 		return output;
 	}
 	
-	
-	
-	
-
 }

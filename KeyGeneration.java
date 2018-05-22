@@ -8,7 +8,8 @@ import java.util.ArrayList;
  *
  * Class : KeyGeneration
  * Purpose :
- * KeyGeneration manages the key of the Des algorithm the class provides:
+ * KeyGeneration manages the key of the Des algorithm
+ * The class provides:
  * key padding for 56 bit key inputs
  * generates a list of 16 keys by applying the appropriate DES procedure from a given input of 56 or 64 bits
  * all data is stored in an array list which is accessed via a get method to access the list of generated keys
@@ -63,7 +64,7 @@ public class KeyGeneration {
                 key = key.substring(7);
                 //appending an odd-parity checksum bit
                 aStringBuilder.append(checksum(aStringBuilder.toString())); // checksum() method performs the odd parity bit checksum
-                //store the new "8 bits" oringal 7 bits + new odd parity bit from the checksum
+                //store the new "8 bits" original 7 bits + new odd parity bit from the checksum
                 finalKey.append(aStringBuilder.toString());
                 //clean the string builder for reuse
                 aStringBuilder.delete(0,aStringBuilder.length());
@@ -82,7 +83,7 @@ public class KeyGeneration {
      * Method : checksum
      * Parameters : String sevenBits ~ 7 bits of data that need a check sum performed on returning an odd parity bit
      * Return type : String ~ odd parity bit
-     * Description : performs a odd parity bit checksum on 7 bits retuning the odd parity bit
+     * Description : performs a odd parity bit checksum on 7 bits returning the odd parity bit
      */
     private String checksum(String sevenBits)
     {
@@ -173,7 +174,7 @@ public class KeyGeneration {
             //Along with doing that each pair that is generated will be pushed to generated its key within the round
             //Setup of c1-15 and d1-15
             leftShift(i);
-            //Generate Key from Key paris C1D1 -> 16
+            //Generate Key from Key pairs C1D1 -> 16
             generateKeyFromKeyPairs(i);
 
         }
@@ -184,7 +185,7 @@ public class KeyGeneration {
      * Parameters : int currentRound ~ denotes the round we are in
      * Return type : void
      * Description : performs a left shift which is associated to the round, the left shift is applied to the 28 bit key pairs
-     * where each new shifted key pair is stored( arraylist C, arraylist D) for later use
+     * where each new shifted key pair is stored(arraylist C, arraylist D) for later use
      */
     private void leftShift(int currentRound)
     {
@@ -273,15 +274,14 @@ public class KeyGeneration {
             aStringBuilder.delete(0,aStringBuilder.length());
 
         }
-
-
     }
 
     /**
      * Method : generateKeyFromKeyPairs
      * Parameters : int currentRound ~ denotes the round we are in
      * Return type : void
-     * Description : for each round we concatenate the key pairs C,D then apply the final permutation PC2 and store the key in the final key list
+     * Description : for each round we concatenate the key pairs C,D then apply the final permutation
+     *  	         PC2 and store the key in the final key list
      */
     private void generateKeyFromKeyPairs(int currentRound)
     {
@@ -296,16 +296,12 @@ public class KeyGeneration {
 
         //Store  concatenated Key
         concatenatedCDkey.add(aStringBuilder.toString());
-        //System.out.println("ConcatenatedCDKey: " + concatenatedCDkey.get(locationOfConcatenatedCDkey));
         //Clean string builder
         aStringBuilder.delete(0,aStringBuilder.length());
 
         //Apply PC2 on concatenatedCDkey and store the result in the finalKeyList
        finalKeyList.add( pc2.performPC2(concatenatedCDkey.get(locationOfConcatenatedCDkey)) );
-
-       // System.out.println("finalKeyList: " + finalKeyList.get(locationOfConcatenatedCDkey));
-    }
-
+  }
 
     /**
      * Method : generateKeyFromKeyPairs

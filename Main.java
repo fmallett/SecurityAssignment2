@@ -17,8 +17,6 @@ public class Main
           args 1 = input file name
           args 2 = output file name
 		 */
-
-
 		String input = "";
 
 		char choice = ' ';
@@ -40,34 +38,9 @@ public class Main
 			}
 			else
 			{
-				/**
-				 * testing code :
-                     for (int i = 0; i < args.length ; i++) {
-                     System.out.println(args[i]);
-                     }
-				 */
-				/**
-				 * old code:
-                    input = args[0];
-                    if(input.equalsIgnoreCase("e")) // encryption
-                    {
-                        choice=args[0];
-                        System.out.println("im equal to e "+ args[0]);
-                    }
-                    else if(input.equalsIgnoreCase("d")) // decryption
-                    {
-                        choice=args[0];
-                        System.out.println("im equal to d "+ args[0]);
-                    }
-                    else
-                    {
-                        //Error
-                    }
-				 */
 				if(args.length>0) // they have provided a file name
 				{
 					inputFileName=args[0];
-					//System.out.println("im equal to inputFileName "+ args[0]);
 				}
 				else
 				{
@@ -89,9 +62,6 @@ public class Main
 				plainText = scanner.getpText();
 				key = scanner.getsKey();
 				choice = scanner.getChoice();
-
-				System.out.println(plainText + "\n" + key + " " + plainText.length() + " " + key.length());
-
 			}
 			if(choice == '0')
 			{
@@ -103,14 +73,15 @@ public class Main
 				avalanche = new Avalanche(plainText, key, outPutFileName);
 				avalanche.calculateAvalancheWhenPChanges();
 				
+				//Store avalanche results in arrayList variables
 				ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK = avalanche.getFinalAveragePandPiUnderK();
 				ArrayList<ArrayList<Integer>> avalancheResultsPUnderKandKi =  avalanche.getFinalAveragePUnderKandKi();
 			
-				
+				//Write to output class
 				output = new Output();
 				output.writeToFile(plainText, key, cipherText, outPutFileName, avalancheResultsPandPiUnderK, avalancheResultsPUnderKandKi);
-
 			}
+			
 			else if (choice == '1')
 			{
 				//Run Decryption

@@ -3,10 +3,11 @@
  *@Name : Fiona Mallett
  *@Course : COMP3260
  *@StudentNumber : 3289339
- *@Date :
+ *@Date : 9/05/2018
  *
  * Class : InitialPermutation
- * Purpose : Defines the Initial Permutation which is performed on the plain text before any modifications are done during des
+ * Purpose : Defines the Initial Permutation which is performed on the plain text before
+ *   		 any modifications are done during des
  */
 
 public class InitialPermutation {
@@ -25,9 +26,9 @@ public class InitialPermutation {
 	};
 	/**
 	 *Method : performInitialPermutation
-	 *Parameters : String keyInput ~ bit string to Permeated
-	 *Return type: String outPut ~ returns the Permeated bit string
-	 *Description: builds the permeated bit string
+	 *Parameters : String keyInput ~ bit string to be permuted
+	 *Return type: String outPut ~ returns the permuted bit string
+	 *Description: builds the permuted bit string
 	 */
 	public String performInitialPermutation(String plainTextInput) {
 		String output = "";

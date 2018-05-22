@@ -3,7 +3,7 @@
  *@Name : Fiona Mallett
  *@Course : COMP3260
  *@StudentNumber : 3289339
- *@Date :
+ *@Date : 13/05/2018
  *
  *Class : FinalPermutation
  *Purpose : applies the Final Permutation defined for DES on a String
@@ -27,9 +27,9 @@ public class FinalPermutation {
 
 	/**
 	 *Method : performFinalPermutation
-	 *Parameters : String plainTextInput ~ bit string to Permeated
-	 *Return type: String outPut ~ returns the Permeated bit string
-	 *Description: builds the permeated bit string
+	 *Parameters : String plainTextInput ~ bit string to be permuted
+	 *Return type: String outPut ~ returns the permuted bit string
+	 *Description: builds the permuted bit string
 	 */
 	public String performFinalPermutation(String plainTextInput) {
 		String output = "";

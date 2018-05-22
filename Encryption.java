@@ -1,17 +1,13 @@
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
  *@Name : Fiona Mallett
  *@Course : COMP3260
  *@StudentNumber : 3289339
- *@Date :
+ *@Date : 4/05/2018
  */
 
 public class Encryption{
-
 
 	public Encryption(String plainText, String key) {
 		super();
@@ -36,6 +32,10 @@ public class Encryption{
 	private String prevRight = "";
 	int number =0;
 
+	
+	//This is the main encryption method used.
+	//It handels which version of DES to encrypt
+	//It returns an ArrayList of Ciphers (produced at each of the 16 rounds of DES) for avalanche
 	public ArrayList<String> encrypt(String plainText, String key, int DESVersion, String outputFileName) throws Exception { 
 
 		keyGeneration = new KeyGeneration(key);
@@ -47,8 +47,7 @@ public class Encryption{
 
 		//Split input (64 bits) into two 32 bit strings
 		splitInput();
-		right = cipherText.substring(32,64);
-		left = cipherText.substring(0,32);
+		
 	
 		//--------------------Start of round function------------------------
 		for (int round = 0; round < 16; round++) {
@@ -59,6 +58,8 @@ public class Encryption{
 
 			prevRight = right;
 			
+			//Depending on which DES version is supplied, a different roundFunction 
+			//will be executed
 			if(DESVersion == 0){
 				roundFunctionDES0(right, round);
 			}
@@ -83,14 +84,13 @@ public class Encryption{
 		
 		//32 bit swap
 		cipherText = right + left;
-
+		
 		//reset left and right so we can start fresh for DES1, DES2 DES3 ..
 		left = "";
 		right = "";
 
 		//Final permutation (Inverse IP)
 		cipherText = finalPermutation.performFinalPermutation(cipherText);
-	
 		//return list of ciphers (produced at each round) to use in avalanche effect
 		return listOfCiphersUsingP;
 	}
@@ -151,19 +151,20 @@ public class Encryption{
 		//final permutation missing
 	}
 
-
 	private void splitInput() {
 		//Split input into left 32 bits and right 32 bits
 		int counter = 0;
 		for (int i = 0; i < cipherText.length(); i++) {
 			//if input file has whitespace, ignore it
 			if(plainText.charAt(i) != ' ' && counter <= 31) {
+				//create the left substring
 				left += cipherText.charAt(i);
 				counter++;
 				if(counter == 32) {
 					i++;
 				}
 			}
+			//create the right substring
 			if (cipherText.charAt(i) != ' ' && left.length() > 31 && counter < 64) {
 				right += cipherText.charAt(i);
 				counter++;
@@ -179,7 +180,7 @@ public class Encryption{
 		}
 
 		String result = "";
-		String temp ="";
+
 		for (int i = 0; i < left.length(); i++) {
 			//When the bits at the same position in the left and right Strings match, 
 			//the XOR result is 0
@@ -196,7 +197,7 @@ public class Encryption{
 
 
 	private String XOR(String bitsToXOR, String key) {
-		String temp = "";
+
 		//Key is 56 bits 
 		if(key.length() != 48) {
 			System.err.println("Key length should be 56 bits in input file");

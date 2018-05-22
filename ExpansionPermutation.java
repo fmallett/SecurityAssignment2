@@ -3,7 +3,7 @@
  *@Name : Fiona Mallett
  *@Course : COMP3260
  *@StudentNumber : 3289339
- *@Date :
+ *@Date : 7/05/2018
  *
  * Class : ExpansionPermutation
  * Purpose : Defines the ExpansionPermutation to be used in DES it takes a 32 bit input and provides a 48 bit output
@@ -55,7 +55,7 @@ public class ExpansionPermutation {
 	}
 	/**
 	 *Method : inverseE
-	 *Parameters : String rightSide ~ bit string to reduced
+	 *Parameters : String rightSide ~ bit string to reduce
 	 *Return type: String outPut ~ returns the reduced 32 bits
 	 *Description: builds the reduced 32 bit string and returns it
 	 */
