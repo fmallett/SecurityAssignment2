@@ -24,10 +24,10 @@ public class Output {
 	 *			  : String key ~ the key data
 	 *			  : String cipherText ~ the ciphertext data
 	 *			  : String outputFileName ~ outputfile name
-	 *			  : ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK ~ 
-	 *			  : ArrayList<ArrayList<Integer>> avalancheResultsPunderKandKi ~
+	 *			  : ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK ~ stores the data related to p and Pi under k
+	 *			  : ArrayList<ArrayList<Integer>> avalancheResultsPunderKandKi ~ stores the data related to p under k and Ki
 	 * Return Type : void
- 	 * Description : generate the output file's data
+ 	 * Description : generate the output file's data for encryption
 	*/
 	//Used for encryption
 	public void writeToFileEncryption(String plainText, String key, String cipherText, String outputFileName,
@@ -85,10 +85,20 @@ public class Output {
 		printToFile(outputBuffer, outputFileName);
 	}
 	
-	//Used for decryption
-	//Notice the different ordering of paramters and output
+
+	/**
+	 * Method : writeToFileDecryption
+	 * Parameters  : String cipherText ~ cipherText data provided by input which was decrypted
+	 *			   : String key ~ the key provided by input
+	 *			   : String plainText ~ the calculated plain text data
+	 *			   : String outputFileName ~ name of the outputfile provided by user
+	 * Return Type : void
+	 * Description : generate the output file's data for decryption
+	 */
 		public void writeToFileDecryption(String cipherText, String key, String plainText, String outputFileName) throws IOException {
-							
+			//Used for decryption
+			//Notice the different ordering of paramters and output
+
 			//Add everything we want to display to the output buffer
 			outputBuffer.append("DECRYPTION");
 			outputBuffer.append(System.getProperty("line.separator"));

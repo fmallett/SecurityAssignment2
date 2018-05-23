@@ -5,23 +5,39 @@ import java.util.ArrayList;
  *@Course Computer Science
  *@StudentNumber 3289339
  *@Date 21/05/2018
+ *
+ * Class : Avalanche
+ * Purpose : This class calculates the average avalanche effect at each of the 16 round and
+ * each version of DES (DES0, DES1, DES2, DES3) compared with the original plaintext
  */
 
-//This class calculates the average avalanche effect at each of the 16 rounds
-//and each version of DES (DES0, DES1, DES2, DES3) compared with the original plaintext
-
 public class Avalanche {
+
+
+	String key, plainText, outputFile;
+	private ArrayList<ArrayList<Integer>> finalAveragePandPiUnderK = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Integer>> finalAveragePUnderKandKi = new ArrayList<ArrayList<Integer>>();
+
+	/**
+	 * Constructor : Avalanche
+	 * Parameters : String plainText ~ the plainText data read by input
+	 *            : String key ~ the key data read by input
+	 *            : String outputFile ~ the output file name provided by user
+	 * Description: initialises the class and variable data
+	 */
 	public Avalanche(String plainText, String key, String outputFile) {
 		this.key = key;
 		this.plainText = plainText;
 		this.outputFile = outputFile;
 	}
 
-	String key, plainText, outputFile;
-	private ArrayList<ArrayList<Integer>> finalAveragePandPiUnderK = new ArrayList<ArrayList<Integer>>();
-	private ArrayList<ArrayList<Integer>> finalAveragePUnderKandKi = new ArrayList<ArrayList<Integer>>();
-	
-
+	/**
+	 * Method : calculateAvalancheWhenPChanges
+	 * Parameters : null
+	 * Return Type : ArrayList<ArrayList<Integer>>  ~ finalAveragePandPiUnderK returns the resulting average of the p and Pi under k
+	 * Description: generates the avalanche effect data for all rounds of des calculating the average for each round,
+	 * used with des 0-3
+	 */
 	public ArrayList<ArrayList<Integer>> calculateAvalancheWhenPChanges() throws Exception {
 		Encryption encryption = new Encryption(plainText, key);
 
@@ -138,6 +154,13 @@ public class Avalanche {
 		return finalAveragePandPiUnderK;
 	}
 
+	/**
+	 * Method : calculateAvalancheWhenKeyChanges
+	 * Parameters : null
+	 * Return Type : void
+	 * Description: generates the avalanche effect data for all rounds of des calculating the average for each round,
+	 * used with des 0-3 used for p Under K and Ki
+	 */
 	public void calculateAvalancheWhenKeyChanges () throws Exception {
 		Encryption encryption = new Encryption(plainText, key);
 
@@ -249,13 +272,28 @@ public class Avalanche {
 		finalAveragePUnderKandKi.add(allAverages3);
 	}
 
+
+	/**
+	 * Method : calculateAverage
+	 * Parameters : int sum ~ total of ur set of results
+	 * 			  : int count ~ the total number of results (the division)
+	 * Return Type : static int ~ result of the average calculation
+	 * Description: calculates the average of a given sum divided by the given count value and returns it
+	 */
 	public static int calculateAverage(int sum, int count) {
 		return sum / count;
 	}
 
-	//Calculates the total number of bits which differ in the 2 input variables
-	//it uses xor but instead of returning the xor result, it returns the total which is used to 
-	//calculate the average for avalanche
+
+	/**
+	 * Method : simpleXORTOFindNumberOfBitDifferences
+	 * Parameters : String plainText ~ bit string 1
+	 * 			  : String plainTextI ~ bit string 2
+	 * Return Type : static int bitDifferences ~ it returns the total which is used to calculate the average for avalanche
+	 * Description: Calculates the total number of bits which differ in the 2 input variables it uses xor
+	 * but instead of returning the xor result,
+	 * it returns the total which is used to calculate the average for avalanche
+	 */
 	public static int simpleXORTOFindNumberOfBitDifferences(String plainText, String plainTextI) {
 		int bitDifferences = 0;
 		for (int j = 0; j < plainText.length(); j++) {
@@ -270,11 +308,22 @@ public class Avalanche {
 	}
 
 	
-	//Getters used for printing
+
+	/**
+	 * Method : getFinalAveragePandPiUnderK
+	 * Parameters : null
+	 * Return Type : ArrayList<ArrayList<Integer>> finalAveragePandPiUnderK ~ returns the averages for p and Pi under k
+	 * Description: returns the averages stored in finalAveragePandPiUnderK
+	 */
 	public ArrayList<ArrayList<Integer>> getFinalAveragePandPiUnderK() {
 		return finalAveragePandPiUnderK;
 	}
-
+	/**
+	 * Method : getFinalAveragePUnderKandKi
+	 * Parameters : null
+	 * Return Type : ArrayList<ArrayList<Integer>> finalAveragePUnderKandKi ~ returns the averages for p under k and Ki
+	 * Description: returns the averages stored in finalAveragePUnderKandKi
+	 */
 	public ArrayList<ArrayList<Integer>> getFinalAveragePUnderKandKi() {
 		return finalAveragePUnderKandKi;
 	}

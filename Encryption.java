@@ -5,10 +5,20 @@ import java.util.ArrayList;
  *@Course : COMP3260
  *@StudentNumber : 3289339
  *@Date : 4/05/2018
+ *
+ * Class : Encryption
+ * Purpose : perform the encryption method DES, and 3 more variations defined in assignment specifications that removed different
+ * components of des or replaced components with an inverse expansion table which is used to explore the avalanche effect
  */
 
 public class Encryption{
 
+	/**
+	 * Constructor : Encryption
+	 * Parameters : String plainText ~ the plainText data read by input
+	 *            : String key ~ the key data read by input
+	 * Description: initialises the class and variable data
+	 */
 	public Encryption(String plainText, String key) {
 		super();
 		this.plainText = plainText;
@@ -36,6 +46,17 @@ public class Encryption{
 	//This is the main encryption method used.
 	//It handels which version of DES to encrypt
 	//It returns an ArrayList of Ciphers (produced at each of the 16 rounds of DES) for avalanche
+	/**
+	 * Method : encrypt
+	 * Parameters : String plainText ~ the plainText data read by input
+	 *            : String key ~ the key data read by input
+	 *            : int DESVersion ~ represents which des version we are running 0-3
+	 *            : String outputFileName ~ reference to the output file name for printing
+	 * Return Type : ArrayList<String> ~ returns the list of ciphers using p (produced at each of the 16 rounds of DES)
+	 * Description: This is the main encryption method handles which version of des is being performed DES0-3
+	 * generated keys then applies the Sbox modifications and the final permutation updating the original rhs variable and also
+	 * It returns an ArrayList<string> of Ciphers (produced at each of the 16 rounds of DES) for avalanche
+	 */
 	public ArrayList<String> encrypt(String plainText, String key, int DESVersion, String outputFileName) throws Exception { 
 
 		keyGeneration = new KeyGeneration(key);
@@ -95,6 +116,14 @@ public class Encryption{
 		return listOfCiphersUsingP;
 	}
 
+	/**
+	 * Method : roundFunctionDES0
+	 * Parameters : String tempRi ~ the rhs of the bit string (32 bits)
+	 *            : int roundNumber ~ reference to the current round
+	 * Return Type : void
+	 * Description: apply the round function of des which applies the expansion permutation (EP), xor's the EP with the
+	 * generated keys then applies the Sbox modifications and the final permutation updating the original rhs variable
+	 */
 	private void roundFunctionDES0(String tempRi, int roundNumber) {
 		//Expansion/permutation
 		tempRi = expansionPermutation.expand(tempRi);
@@ -109,6 +138,14 @@ public class Encryption{
 		right = permutation.permutationFunctionP(tempRi);
 	}
 
+	/**
+	 * Method : roundFunctionDES1
+	 * Parameters : String tempRi ~ the rhs of the bit string (32 bits)
+	 *            : int roundNumber ~ reference to the current round
+	 * Return Type : void
+	 * Description: apply the round function of des1 which applies the expansion permutation (EP), xor's the EP with the
+	 * generated keys then applies the Sbox modifications NOT doing the final permutation, updating the original rhs variable
+	 */
 	private void roundFunctionDES1(String tempRi, int roundNumber) {
 		//PERMUTATION MISSING FROM DES1
 		//Expansion/permutation 
@@ -119,6 +156,14 @@ public class Encryption{
 		right = useSBox(tempRi);
 	}
 
+	/**
+	 * Method : roundFunctionDES2
+	 * Parameters : String tempRi ~ the rhs of the bit string (32 bits)
+	 *            : int roundNumber ~ reference to the current round
+	 * Return Type : void
+	 * Description: apply the round function of des1 which applies the expansion permutation (EP), xor's the EP with the
+	 * generated keys then applies the "inverse expansion table" and the final permutation, updating the original rhs variable
+	 */
 	private void roundFunctionDES2(String tempRi, int roundNumber) {
 		//S-box is replaced with the inverse of
 		//the expansion permutation (E-table)
@@ -134,7 +179,14 @@ public class Encryption{
 		//Permutation function(P)
 		right = permutation.permutationFunctionP(tempRi);
 	}
-
+	/**
+	 * Method : roundFunctionDES3
+	 * Parameters : String tempRi ~ the rhs of the bit string (32 bits)
+	 *            : int roundNumber ~ reference to the current round
+	 * Return Type : void
+	 * Description: apply the round function of des1 which applies the expansion permutation (EP), xor's the EP with the
+	 * generated keys then applies the "inverse expansion table" and NOT doing the final permutation, updating the original rhs variable
+	 */
 	private void roundFunctionDES3(String tempRi, int roundNumber) {
 		//The permutation P is missing 
 		//S-box is replaced with the inverse of
@@ -151,6 +203,13 @@ public class Encryption{
 		//final permutation missing
 	}
 
+	/**
+	 * Method : splitInput
+	 * Parameters : null
+	 * Return Type : void
+	 * Description: basic whitespace error checking of the input plaintext which
+	 * then performs a split to break the plaintext into two 32 bit halves
+	 */
 	private void splitInput() {
 		//Split input into left 32 bits and right 32 bits
 		int counter = 0;
@@ -172,6 +231,13 @@ public class Encryption{
 		}		
 	}
 
+	/**
+	 * Method : XOR32Bits
+	 * Parameters : String left ~ data to be xored
+	 *            : String right ~ data to be xored
+	 * Return Type : String result ~ result of the xor
+	 * Description: xor 32bit length data and return the xor result
+	 */
 	private String XOR32Bits(String left, String right) {
 		//check the left and right bits are 32 bits long
 		if (left.length() != 32 && right.length() != 32){
@@ -196,6 +262,13 @@ public class Encryption{
 	}
 
 
+	/**
+	 * Method : XOR
+	 * Parameters : String bitsToXOR ~ bits that xor is being applied to
+	 *            : String key ~ the key to xor the bits with
+	 * Return Type : String result ~ returns the result of the xor
+	 * Description: apply the xor operator on the "bitsToXOR" with the key and return the result
+	 */
 	private String XOR(String bitsToXOR, String key) {
 
 		//Key is 56 bits 
@@ -226,6 +299,12 @@ public class Encryption{
 		return result;
 	}
 
+	/**
+	 * Method : useSBox
+	 * Parameters : String R1beforeSBox ~ a bit string that is ready to be sboxed that is it IP, Expansion and XOR with key
+	 * Return type : String result ~ returns the new values calculated from the sbox (a new bit string)
+	 * Description: applies the sbox modifications to the bit data for des
+	 */
 	private String useSBox(String R1beforeSBox) {
 		//S-box takes 48 bit input and returns 32 bit output
 		//result will store the values returned by the s-box
@@ -245,10 +324,22 @@ public class Encryption{
 		return result.toString();
 	}
 
+	/**
+	 * Method : getCipherText
+	 * Parameters : null
+	 * Return type : String cipherText ~ the cipherText data created by the encryption class
+	 * Description: returns the cipher text
+	 */
 	public static String getCipherText() {
 		return cipherText;
 	}
 
+	/**
+	 * Method : setCipherText
+	 * Parameters : String cipherText ~ set the cipherText equal to the parameter
+	 * Return type : void
+	 * Description: updates the cipherText variable
+	 */
 	public static void setCipherText(String cipherText) {
 		Encryption.cipherText = cipherText;
 	}

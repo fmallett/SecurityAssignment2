@@ -9,13 +9,20 @@ import java.util.ArrayList;
  * @Date :           12/5/18
  */
 
+/**
+ * Class: Application
+ * Purpose: Drive the entire program, accepts arguments 0 for input file name and 1 for output file name
+ * based on given input in the input file on line 1 (a 0 or a 1) this class will either call encryption or decryption classes on the input data
+ * perform encryption or decryption which will then display the data to the specified output file.
+ */
+
 public class Application
 {
 	public static void main(String[] args)
 	{
-		/**args 0 = decryption or encryption denoted d or e (ignoring case) been over ruled changed to reading first line of file for a 0 or a 1
-          args 1 = input file name
-          args 2 = output file name
+		/**
+          args 0 = input file name
+          args 1 = output file name
 		 */
 		String input = "";
 

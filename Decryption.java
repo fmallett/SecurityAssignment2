@@ -97,7 +97,7 @@ public class Decryption {
 
     /**
      * Method : roundFunctionDES0
-     * Parameters : String Ri ~
+     * Parameters : String tempRi ~ the rhs of the bit string (32 bits)
      *            : int roundNumber ~ reference to the current round
      * Return Type : void
      * Description: apply the round function of des which applies the expansion permutation (EP), xor's the EP with the
@@ -222,11 +222,21 @@ public class Decryption {
         System.out.println("CipherText " + cipherText);
     }
 
-    //Getter for printing
+    /**
+     * Method : getCipherText
+     * Parameters : null
+     * Return type : String cipherText ~ the cipherText data supplied by the inpu
+     * Description: returns the cipher text
+     */
     public String getCipherText() {
 		return cipherText;
 	}
-    //Getter for printing
+    /**
+     * Method : getPlainText
+     * Parameters : null
+     * Return type : String plainText ~ the plainText data decrypted by this class
+     * Description: returns the plain text
+     */
     public String getPlainText() {
 		return plainText;
 	}
