@@ -280,8 +280,8 @@ public class Avalanche {
 	 * Return Type : static int ~ result of the average calculation
 	 * Description: calculates the average of a given sum divided by the given count value and returns it
 	 */
-	public static int calculateAverage(int sum, int count) {
-		return sum / count;
+	public static int calculateAverage(float sum, float count) {
+		return Math.round(sum / count);
 	}
 
 
