@@ -69,6 +69,41 @@ public class Application
 				plainText = scanner.getpText();
 				key = scanner.getsKey();
 				choice = scanner.getChoice();
+
+				//safety check making sure plaintext and key are all 0's
+				for (int i = 0; i < plainText.length(); i++)
+				{
+					if(plainText.charAt(i) == '1')
+					{
+
+					}
+					else if (plainText.charAt(i) == '0')
+					{
+
+					}
+					else
+					{
+						System.out.println("Invalid literal deterred in plain text please check input file: " + inputFileName + " exiting application to avoid errors");
+						System.exit(-1);
+					}
+
+				}
+				for (int i = 0; i < key.length(); i++)
+				{
+					if(key.charAt(i) == '1')
+					{
+
+					}
+					else if ( key.charAt(i) == '0')
+					{
+
+					}
+					else
+					{
+						System.out.println("Invalid literal deterred in key please check input file: " + inputFileName + " exiting application to avoid errors");
+						System.exit(-1);
+					}
+				}
 			}
 			if(choice == '0')
 			{
