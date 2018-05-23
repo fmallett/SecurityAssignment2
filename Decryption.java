@@ -37,7 +37,7 @@ public class Decryption {
      * Parameters :
      * Description: initialises the output file name for displaying, cipher text for decryption, the key used to decrypt the plaintext.
      * Generates the key list using the supplied key
-     * performs the intial split of the cipher text into the 32 bit halves (left and right) and begins starts rounds for des
+     * performs the initial split of the cipher text into the 32 bit halves (left and right) and begins starts rounds for des
      */
     Decryption (String cipherText_, String key_, String outPutFileName_)
     {
@@ -57,9 +57,6 @@ public class Decryption {
         left = plainText.substring(0,32);
         //start rounds
         round();
-
-        //output the results
-        outPut();
 
     }
 
@@ -212,7 +209,7 @@ public class Decryption {
      * Method : outPut
      * Parameters : null
      * Return type : void
-     * Description: outputs data to screen
+     * Description: outputs data to screen used for testing purposes
      */
     private void outPut()
     {

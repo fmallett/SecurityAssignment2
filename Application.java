@@ -21,8 +21,8 @@ public class Application
 	public static void main(String[] args)
 	{
 		/**
-          args 0 = input file name
-          args 1 = output file name
+		 args 0 = input file name
+		 args 1 = output file name
 		 */
 		String input = "";
 
@@ -58,7 +58,6 @@ public class Application
 				if(args.length>1) // they have provided a file name
 				{
 					outPutFileName =args[1];
-					System.out.println("im equal to outPutFileName "+ args[1]);
 				}
 				else
 				{
@@ -80,16 +79,16 @@ public class Application
 				//Calculate Avalanche
 				avalanche = new Avalanche(plainText, key, outPutFileName);
 				avalanche.calculateAvalancheWhenPChanges();
-				
+
 				//Store avalanche results in arrayList variables
 				ArrayList<ArrayList<Integer>> avalancheResultsPandPiUnderK = avalanche.getFinalAveragePandPiUnderK();
 				ArrayList<ArrayList<Integer>> avalancheResultsPUnderKandKi =  avalanche.getFinalAveragePUnderKandKi();
-			
+
 				//Write to output class
 				output = new Output();
 				output.writeToFileEncryption(plainText, key, cipherText, outPutFileName, avalancheResultsPandPiUnderK, avalancheResultsPUnderKandKi);
 			}
-			
+
 			else if (choice == '1')
 			{
 				//Run Decryption
